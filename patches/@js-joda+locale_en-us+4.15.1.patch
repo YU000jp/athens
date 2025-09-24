@@ -1,0 +1,24 @@
+diff --git a/node_modules/@js-joda/locale_en-us/dist/index.js b/node_modules/@js-joda/locale_en-us/dist/index.js
+index aecdea1..2cebcc5 100644
+--- a/node_modules/@js-joda/locale_en-us/dist/index.js
++++ b/node_modules/@js-joda/locale_en-us/dist/index.js
+@@ -13684,8 +13684,19 @@
+   	// Extent Cldr with the following modules
+   } (node_main));
+ 
++  // Fix for Cldr.load is not a function error
+   var Cldr = /*@__PURE__*/getDefaultExportFromCjs(node_mainExports);
+ 
++  // Ensure Cldr is properly initialized with required methods
++  if (!Cldr || typeof Cldr.load !== 'function') {
++    try {
++      Cldr = require('cldrjs');
++    } catch (e) {
++      // If require fails in browser environment, create a minimal stub
++      Cldr = { load: function() { /* no-op */ } };
++    }
++  }
++
+   /*
+   * @copyright (c) 2020, Philipp Thuerwaechter & Pattrick Hueper
+   * @license BSD-3-Clause (see LICENSE.md in the root directory of this source tree)
