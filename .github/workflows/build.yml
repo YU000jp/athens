@@ -123,7 +123,7 @@ jobs:
       #    run: yarn client:e2e
 
        - name: Upload built app for release-web, release-electron
-         uses: actions/upload-artifact@v3
+         uses: actions/upload-artifact@v4
          with:
            name: app
            path: resources
@@ -139,7 +139,7 @@ jobs:
        - uses: ./.github/custom-actions/node-env
 
        - name: Download built app
-         uses: actions/download-artifact@v3
+         uses: actions/download-artifact@v4
          with:
            name: app
            path: resources
@@ -186,7 +186,7 @@ jobs:
            echo '${{ secrets.api_key }}' > ~/private_keys/AuthKey_${{ secrets.api_key_id }}.p8
 
        - name: Download built app
-         uses: actions/download-artifact@v3
+         uses: actions/download-artifact@v4
          with:
            name: app
            path: resources
@@ -226,7 +226,7 @@ jobs:
        - uses: ./.github/custom-actions/clojure-env
 
        - name: Download built app
-         uses: actions/download-artifact@v3
+         uses: actions/download-artifact@v4
          with:
            name: app
            path: resources
