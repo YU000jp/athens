@@ -18,11 +18,11 @@ jobs:
    lint:
      runs-on: ubuntu-latest
      steps:
-       - uses: actions/checkout@v2
+       - uses: actions/checkout@v4
 
        # We don't use yarn lint here in order to have faster CI.
        # Keep version and script up to date!
-       - uses: DeLaGuardo/setup-clj-kondo@master
+       - uses: DeLaGuardo/setup-clj-kondo@main
          with:
            version: '2022.03.09'
 
@@ -33,7 +33,7 @@ jobs:
    style:
      runs-on: ubuntu-latest
      steps:
-       - uses: actions/checkout@v2
+       - uses: actions/checkout@v4
        - uses: ./.github/custom-actions/clojure-env
 
        - name: Style
@@ -43,7 +43,7 @@ jobs:
    carve:
      runs-on: ubuntu-latest
      steps:
-       - uses: actions/checkout@v2
+       - uses: actions/checkout@v4
        - uses: ./.github/custom-actions/clojure-env
 
        - name: Carve unused vars
@@ -53,7 +53,7 @@ jobs:
    test:
      runs-on: ubuntu-latest
      steps:
-       - uses: actions/checkout@v2
+       - uses: actions/checkout@v4
        - uses: ./.github/custom-actions/clojure-env
        - uses: ./.github/custom-actions/node-env
 
@@ -76,7 +76,7 @@ jobs:
   #  e2e:
   #    runs-on: ubuntu-latest
   #    steps:
-  #      - uses: actions/checkout@v2
+  #      - uses: actions/checkout@v4
   #      - uses: ./.github/custom-actions/clojure-env
   #      - uses: ./.github/custom-actions/node-env
 
@@ -84,7 +84,7 @@ jobs:
   #      # and shadow-cljs is usually pretty good at cache invalidation.
   #      # Still, if you think this cache is breaking builds, just bump the version number.
   #      - name: Restore shadow-cljs build cache
-  #        uses: actions/cache@v2
+  #        uses: actions/cache@v3
   #        id: restore-shadow-cljs-build-cache
   #        with:
   #          path: ./.shadow-cljs
@@ -104,9 +104,17 @@ jobs:
      if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')
      runs-on: ubuntu-latest
      steps:
-       - uses: actions/checkout@v2
+       - uses: actions/checkout@v4
        - uses: ./.github/custom-actions/clojure-env
        - uses: ./.github/custom-actions/node-env
+
+       - name: Test connectivity to required repositories
+         run: |
+           echo "Testing connectivity to required repositories..."
+           echo "Maven Central (should work):"
+           curl -I https://repo1.maven.org/maven2/ || echo "❌ Maven Central unreachable"
+           echo "Clojars (might be blocked):"
+           curl -I https://repo.clojars.org/ || echo "❌ Clojars unreachable (expected in restricted environments)"
 
        - name: Compile JS Assets for production
          run: yarn prod --config-merge "{:closure-defines {athens.core/SENTRY_DSN \"${SENTRY_DSN}\" athens.util/COMMIT_URL \"${COMMIT_URL}\"}}"
@@ -118,7 +126,7 @@ jobs:
       #    run: yarn client:e2e
 
        - name: Upload built app for release-web, release-electron
-         uses: actions/upload-artifact@v2
+         uses: actions/upload-artifact@v3
          with:
            name: app
            path: resources
@@ -130,11 +138,11 @@ jobs:
      if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v2.')
      runs-on: ubuntu-latest
      steps:
-       - uses: actions/checkout@v2
+       - uses: actions/checkout@v4
        - uses: ./.github/custom-actions/node-env
 
        - name: Download built app
-         uses: actions/download-artifact@v2
+         uses: actions/download-artifact@v3
          with:
            name: app
            path: resources
@@ -170,7 +178,7 @@ jobs:
          os: [ubuntu-latest, windows-latest, macos-latest]
 
      steps:
-       - uses: actions/checkout@v2
+       - uses: actions/checkout@v4
        - uses: ./.github/custom-actions/node-env
 
        - name: Prepare for app notarization (macOS)
@@ -181,7 +189,7 @@ jobs:
            echo '${{ secrets.api_key }}' > ~/private_keys/AuthKey_${{ secrets.api_key_id }}.p8
 
        - name: Download built app
-         uses: actions/download-artifact@v2
+         uses: actions/download-artifact@v3
          with:
            name: app
            path: resources
@@ -217,11 +225,11 @@ jobs:
      if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')
 
      steps:
-       - uses: actions/checkout@v2
+       - uses: actions/checkout@v4
        - uses: ./.github/custom-actions/clojure-env
 
        - name: Download built app
-         uses: actions/download-artifact@v2
+         uses: actions/download-artifact@v3
          with:
            name: app
            path: resources
@@ -234,13 +242,13 @@ jobs:
 
        # we need QEMU for multi-arch build
        - name: Set up QEMU
-         uses: docker/setup-qemu-action@v1
+         uses: docker/setup-qemu-action@v2
 
        - name: Set up Docker Buildx
-         uses: docker/setup-buildx-action@v1
+         uses: docker/setup-buildx-action@v2
 
        - name: Login to Github Container registry
-         uses: docker/login-action@v1
+         uses: docker/login-action@v2
          with:
            registry: ${{ env.REGISTRY }}
            username: ${{ github.actor }}
@@ -259,7 +267,7 @@ jobs:
            images: ${{ env.REGISTRY }}/${{ github.repository_owner }}/nginx
 
        - name: Build and push athens
-         uses: docker/build-push-action@v2
+         uses: docker/build-push-action@v4
          with:
            # Use the current folder as context instead of the branch.
            # Needed to use artifacts like the server jar.
@@ -275,7 +283,7 @@ jobs:
            cache-to: type=gha,mode=max
 
        - name: Build and push nginx
-         uses: docker/build-push-action@v2
+         uses: docker/build-push-action@v4
          with:
            context: .
            platforms: linux/amd64,linux/arm64
