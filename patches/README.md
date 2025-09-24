@@ -36,6 +36,14 @@ The patch adds fallback logic to ensure the `Cldr` object is properly initialize
 
 The patch is automatically applied after `yarn install` thanks to the `patch-package` postinstall script.
 
+To verify the fix is working correctly, run:
+
+```bash
+node verify-cldr-fix.js
+```
+
 ## Testing
 
 The fix has been tested in Node.js environment and should resolve the Karma test issues.
+
+For troubleshooting CLDR-related problems, see [CLDR_TROUBLESHOOTING.md](../CLDR_TROUBLESHOOTING.md).

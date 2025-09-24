@@ -26,6 +26,10 @@ module.exports = function (config) {
       args: ['shadow.test.karma.init'],
       singleRun: true
     },
+    
+    // Enhanced timeouts for CLDR loading
+    browserSocketTimeout: 60000,
+    browserNoActivityTimeout: 60000,
 
     // the default configuration
     junitReporter: {
