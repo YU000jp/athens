@@ -1,5 +1,12 @@
 {:paths ["src/clj" "src/cljs" "src/cljc" "src/js" "src/gen" "test" "resources"]
 
+ ;; Repository configuration - prioritize Maven Central, fallback to Clojars
+ ;; This helps when Clojars access is restricted but Maven Central is available
+ :mvn/repos
+ {"central"   {:url "https://repo1.maven.org/maven2/"}
+  "sonatype"  {:url "https://oss.sonatype.org/content/repositories/public/"}
+  "clojars"   {:url "https://repo.clojars.org/"}}
+
  :deps
  {org.clojure/clojure                   #:mvn{:version "1.11.1"}
   org.clojure/clojurescript             #:mvn{:version "1.11.60"}
