@@ -59,3 +59,4 @@ vercel-static/*
 .vercel
 vercel-release/*
 !vercel-release/package.json
+test-repo-config.sh
