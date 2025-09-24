@@ -20,14 +20,11 @@ jobs:
      steps:
        - uses: actions/checkout@v4
 
-       # We don't use yarn lint here in order to have faster CI.
-       # Keep version and script up to date!
-       - uses: DeLaGuardo/setup-clj-kondo@main
-         with:
-           version: '2022.03.09'
+       # Use the existing clojure-env action which includes proper setup
+       - uses: ./.github/custom-actions/clojure-env
 
        - name: Lint
-         run: clj-kondo --lint src
+         run: clojure -M:clj-kondo --lint src
 
 
    style:
