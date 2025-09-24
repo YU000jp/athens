@@ -4,7 +4,16 @@ module.exports = function (config) {
   config.set({
     browsers: ['ChromeHeadless'],
     basePath: 'target',
-    files: ['karma-test.js'],
+    files: [
+      // Load CLDR dependencies in correct order before test files
+      '../node_modules/cldrjs/dist/cldr.js',
+      // Initialize CLDR with minimal required data  
+      '../cldr-init.js',
+      // Provide fallback mock if CLDR loading fails
+      '../cldr-mock.js',
+      // Main test file
+      'karma-test.js'
+    ],
     frameworks: ['cljs-test'],
     plugins: [
         'karma-cljs-test',
