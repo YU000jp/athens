@@ -3,14 +3,21 @@
   "name": "athens",
   "build": {
     "env": {
-      "NODE_VERSION": "20"
+      "NODE_VERSION": "20",
+      "ATHENS_BUILD_MODE": "auto",
+      "JAVA_TOOL_OPTIONS": "-Xmx2g"
     }
   },
-  "buildCommand": "yarn vercel:build",
+  "buildCommand": "yarn vercel:build:enhanced",
   "outputDirectory": "vercel-static",
-  "installCommand": "yarn vercel:install",
+  "installCommand": "yarn vercel:install:enhanced",
   "framework": null,
   "public": false,
+  "functions": {
+    "pages/api/**/*.js": {
+      "runtime": "nodejs18.x"
+    }
+  },
   "rewrites": [
     {
       "source": "/athens/(.*)",
@@ -19,6 +26,10 @@
     {
       "source": "/clerk/(.*)", 
       "destination": "/clerk/$1"
+    },
+    {
+      "source": "/",
+      "destination": "/athens/index.html"
     }
   ],
   "headers": [
@@ -28,6 +39,19 @@
         {
           "key": "Cache-Control",
           "value": "public, max-age=86400"
+        },
+        {
+          "key": "X-Athens-Build",
+          "value": "vercel-enhanced"
+        }
+      ]
+    },
+    {
+      "source": "/static/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=2592000"
         }
       ]
     }
