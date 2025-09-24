@@ -4,7 +4,7 @@ runs:
   using: "composite"
   steps:
     - name: Restore maven
-      uses: actions/cache@v2
+      uses: actions/cache@v3
       id: restore-maven
       with:
         path: ~/.m2/repository
@@ -13,7 +13,7 @@ runs:
           ${{ runner.os }}-maven-
 
     - name: Restore gitlibs
-      uses: actions/cache@v2
+      uses: actions/cache@v3
       id: restore-gitlibs
       with:
         path: ~/.gitlibs
@@ -22,18 +22,38 @@ runs:
           ${{ runner.os }}-gitlibs-
 
     - name: Prepare java
-      uses: actions/setup-java@v2
+      uses: actions/setup-java@v3
       with:
         java-version: '17'
         distribution: 'temurin'
 
-    - uses: DeLaGuardo/setup-clojure@3.5
+    - uses: DeLaGuardo/setup-clojure@9.5
       with:
-        cli: 1.10.3.986
+        cli: 1.11.1.1435
 
     - name: Fetch dependencies
       # Clojure on windows needs to be run on powershell.
       # Powershell is also present on other platforms so we can use it for all.
       shell: pwsh
       if: steps.restore-maven.outputs.cache-hit != 'true'
-      run: clojure -P
+      run: |
+        # Retry dependency fetch up to 3 times to handle network issues
+        $MaxRetries = 3
+        $RetryCount = 0
+        do {
+          try {
+            Write-Host "Fetching Clojure dependencies (attempt $($RetryCount + 1)/$MaxRetries)..."
+            clojure -P
+            Write-Host "Dependencies fetched successfully!"
+            break
+          } catch {
+            $RetryCount++
+            Write-Host "Dependency fetch failed: $($_.Exception.Message)"
+            if ($RetryCount -eq $MaxRetries) {
+              Write-Host "Failed to fetch dependencies after $MaxRetries attempts."
+              Write-Host "This might be due to network access restrictions to Clojars."
+              throw
+            }
+            Start-Sleep -Seconds 10
+          }
+        } while ($RetryCount -lt $MaxRetries)
