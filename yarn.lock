@@ -2304,10 +2304,10 @@
   resolved "https://registry.yarnpkg.com/@js-joda/locale/-/locale-4.15.2.tgz#bb1094d6e481728acecfc4931ed05ba944750d2f"
   integrity sha512-/36yzGJ0mPPJ0YJfkJz6gf6qG3z09p/eEDjsxGp8l/5mEGf0RAGnG08AwjC6NM9Z6cbm7vmuNCITnyt3tZT4Zg==
 
-"@js-joda/locale_en-us@4.15.1":
-  version "4.15.1"
-  resolved "https://registry.yarnpkg.com/@js-joda/locale_en-us/-/locale_en-us-4.15.1.tgz#c3987d858d9e813659dcaad8f33598ccd4f5a57f"
-  integrity sha512-bEc9b3lUE+zO9vqxg5GDt117G5jrpSpP4eDBxoAiRAU4b5cZu4eW+NexHCbrnVKAXAUOYKcG1kcmhKqtVL6Yuw==
+"@js-joda/locale_en-us@4.8.10":
+  version "4.8.10"
+  resolved "https://registry.yarnpkg.com/@js-joda/locale_en-us/-/locale_en-us-4.8.10.tgz#86929ccd6d41de7a863265ea8a770aafe9eba037"
+  integrity sha512-IZpQUvA78KI2Ho0dNpiQnx8MzswhZO/csFSky4vCCZ01/XWOeCu4eDhcxThXQJDt4fkNgoISKrmSwUmQRhgxwQ==
 
 "@js-joda/timezone@2.22.0":
   version "2.22.0"
