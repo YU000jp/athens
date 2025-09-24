@@ -46,7 +46,7 @@ VERCEL_PROJECT_ID   # Vercel プロジェクト ID
 
 - Node.js 20+
 - Java 11+
-- Clojure CLI
+- Clojure CLI (オプション: なくても部分ビルド可能)
 - Yarn
 
 ### セットアップ
@@ -54,7 +54,7 @@ VERCEL_PROJECT_ID   # Vercel プロジェクト ID
 ```bash
 # 依存関係のインストール
 yarn install
-clojure -P
+clojure -P  # Clojure が利用可能な場合
 
 # JavaScript コンポーネントのビルド
 yarn components
@@ -63,13 +63,32 @@ yarn components
 yarn vercel:build
 ```
 
-### モック ビルドでのテスト
-
-ネットワーク接続の問題がある場合は、モック ビルドを使用できます：
+### Vercel ビルドのテスト
 
 ```bash
-./mock-vercel-build.sh
+# 完全なテストスイート（サーバー起動含む）
+./test-vercel-setup.sh
+
+# ビルドのみテスト
+yarn vercel:install
+yarn vercel:build
 ```
+
+### ビルドモード
+
+Athens Vercel ビルドは環境に応じて3つのモードで動作します：
+
+1. **フルビルド** (`full`)
+   - Clojure CLI利用可能 + 全依存関係アクセス可能
+   - ClojureScript コンパイル + Clerk Notebooks 生成
+
+2. **部分ビルド** (`partial`)
+   - Clojure CLI利用可能 + 制限されたネットワーク
+   - JavaScript コンポーネントのみ + 基本的な HTML
+
+3. **モックビルド** (`mock`)
+   - Clojure CLI不可 または 重度のネットワーク制限
+   - プリコンパイル済みコンポーネント + 情報ページ
 
 ## ファイル構造
 
@@ -106,7 +125,7 @@ git push origin v2.1.0
 
 1. **Clojure 依存関係の問題**
    ```bash
-   # 依存関係の再インストール
+   # ローカル環境での依存関係の再インストール
    clojure -P
    ```
 
@@ -117,10 +136,14 @@ git push origin v2.1.0
    ```
 
 3. **ネットワーク接続の問題**
-   ```bash
-   # モック ビルドを使用
-   ./mock-vercel-build.sh
-   ```
+   - **Vercel ビルド環境**: 自動的にフォールバック モードを使用
+   - **ローカル開発**: `./test-vercel-setup.sh` でテスト
+   - **完全ビルド**: ネットワーク制限のない環境が必要
+
+4. **Vercel デプロイメントの問題**
+   - **Clojars アクセス**: `repo.clojars.org` への接続が制限される場合があります
+   - **自動フォールバック**: コンポーネントベースの部分ビルドに自動切り替え
+   - **プレビュー機能**: 制限された環境でも基本的な機能をプレビュー可能
 
 ### ログの確認
 
