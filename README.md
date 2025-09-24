@@ -60,6 +60,9 @@ yarn client:web:static
 # Build desktop application
 yarn prod
 yarn dist
+
+# Build for Vercel deployment
+yarn vercel:build
 ```
 
 ### 🔧 Development
@@ -79,6 +82,7 @@ yarn test         # Run test suite
 yarn lint         # Code linting
 yarn build        # Production build
 yarn server       # Start backend server
+yarn vercel:build # Build for Vercel deployment
 ```
 
 ### 🎯 Roadmap
