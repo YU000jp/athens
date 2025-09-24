@@ -1,0 +1,35 @@
+{
+  "version": 2,
+  "name": "athens",
+  "build": {
+    "env": {
+      "NODE_VERSION": "20"
+    }
+  },
+  "buildCommand": "yarn vercel:build",
+  "outputDirectory": "vercel-static",
+  "installCommand": "yarn vercel:install",
+  "framework": null,
+  "public": false,
+  "rewrites": [
+    {
+      "source": "/athens/(.*)",
+      "destination": "/athens/$1"
+    },
+    {
+      "source": "/clerk/(.*)", 
+      "destination": "/clerk/$1"
+    }
+  ],
+  "headers": [
+    {
+      "source": "/athens/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=86400"
+        }
+      ]
+    }
+  ]
+}

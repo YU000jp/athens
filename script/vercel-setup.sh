@@ -19,11 +19,18 @@ set -euxo pipefail
 
 # See https://vercel.com/docs/concepts/deployments/build-step#build-image for custom setup instructions.
 
-# Java 11 is already installed.
+# Java 11+ is already installed.
 java --version
 
-# Clojure linux installer.
-curl -O https://download.clojure.org/install/linux-install-1.10.3.1040.sh
-chmod +x linux-install-1.10.3.1040.sh
-./linux-install-1.10.3.1040.sh
-clojure --version
+# Check if Clojure is already installed
+if command -v clojure >/dev/null 2>&1; then
+    echo "Clojure is already installed:"
+    clojure --version
+else
+    echo "Installing Clojure CLI..."
+    # Clojure linux installer.
+    curl -O https://download.clojure.org/install/linux-install-1.11.1.1435.sh
+    chmod +x linux-install-1.11.1.1435.sh
+    ./linux-install-1.11.1.1435.sh
+    clojure --version
+fi

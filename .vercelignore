@@ -1,0 +1,10 @@
+# Local development files
+.env*.local
+.env.development.local
+
+# Vercel outputs  
+.vercel
+
+# OS files
+.DS_Store
+Thumbs.db
