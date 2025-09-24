@@ -78,9 +78,15 @@ if [ "$CLOJURE_AVAILABLE" = true ] && [ "$CLOJARS_ACCESSIBLE" = true ]; then
     echo "🎯 Full build mode: Clojure and dependencies available"
     export ATHENS_BUILD_MODE="full"
 elif [ "$CLOJURE_AVAILABLE" = true ] && [ "$MAVEN_ACCESSIBLE" = true ]; then
-    echo "⚠️  Partial build mode: Clojure available but some dependencies may fail"
-    echo "    Will attempt full build with fallback to components-only build"
+    echo "⚠️  Partial build mode: Clojure available, attempting Maven Central + cached dependencies"
+    echo "    Using repository priority configuration (Maven Central first)"
     export ATHENS_BUILD_MODE="partial"
+    
+    # Try to use the pre-cache script for better dependency resolution
+    if [ -f "./script/pre-cache-deps.sh" ]; then
+        echo "🔄 Attempting to pre-cache dependencies..."
+        ./script/pre-cache-deps.sh || echo "⚠️  Pre-cache script completed with warnings"
+    fi
 else
     echo "🧪 Mock build mode: Limited network access or missing Clojure"
     echo "    Will use pre-compiled components and static fallback"
