@@ -839,4 +839,364 @@ export const BlockComponent = React.memo(({ block, depth }) => {
     (combine base-data other-data)))
 ```
 
+## Athens Type System and Protocols
+
+### Block Type Dispatch System
+```clojure
+;; Athens uses multimethods for block type rendering
+(defmulti block-type->protocol
+  "Returns BlockTypeProtocol for rendering based on block type"
+  (fn [k _args-map] k))
+
+;; Block type examples
+(defmethod block-type->protocol "[[athens/task]]" [_ args]
+  ;; Task block rendering logic
+  )
+
+(defmethod block-type->protocol "[[athens/query]]" [_ args]
+  ;; Query block rendering logic  
+  )
+
+;; Type dispatcher with feature flags
+(defn if-not-disabled [block-type feature-flags]
+  (let [type->ff {"[[athens/task]]" :tasks
+                  "[[athens/query]]" :queries}]
+    (if-let [ff (type->ff block-type)]
+      (and (feature-flags ff) block-type)
+      block-type)))
+```
+
+### Block Editing Protocols
+```clojure
+;; Editor behavior dispatch based on block content
+(defprotocol BlockEditingBehavior
+  (handle-keydown [this event block-uid])
+  (handle-paste [this event block-uid])
+  (get-completion-suggestions [this text cursor-pos]))
+```
+
+## Advanced Re-frame Patterns
+
+### Custom Interceptors
+```clojure
+;; Persistence interceptor for Athens data
+(def persist-db
+  "Saves the :athens/persist key to localStorage"
+  (rf/->interceptor
+    :id    :persist
+    :after (fn [{:keys [coeffects effects] :as context}]
+             (let [k      :athens/persist
+                   before (-> coeffects :db k)
+                   after  (-> effects :db k)]
+               (when (and after (not (identical? before after)))
+                 (util/local-storage-set! k after)))
+             context)))
+
+;; Sentry monitoring interceptor
+(defn sentry-span [span-name]
+  (rf/->interceptor
+    :id     :sentry-span
+    :before (fn [context]
+              (sentry/start-span span-name context))
+    :after  (fn [context]
+              (sentry/finish-span context))))
+```
+
+### Advanced Event Patterns
+```clojure
+;; Multi-stage event handling with async flow
+(rf/reg-event-fx
+  ::complex-block-operation
+  [(sentry-span "block-operation") persist-db]
+  (fn [{:keys [db]} [_ operation-data]]
+    {:db (update-db-stage-1 db operation-data)
+     :async-flow {:id :block-op
+                  :rules [{:when :seen? 
+                           :events ::stage-1-complete
+                           :dispatch [::stage-2 operation-data]}]}}))
+
+;; Debounced events for performance
+(rf/reg-fx
+  :dispatch-debounced
+  (fn [{:keys [key dispatch timeout]}]
+    (js/clearTimeout (get @debounce-timeouts key))
+    (swap! debounce-timeouts assoc key
+           (js/setTimeout #(rf/dispatch dispatch) timeout))))
+```
+
+## Keyboard and Input Handling Patterns
+
+### Block Editor Key Bindings
+```clojure
+;; Complex keyboard event handling in blocks
+(defn handle-keydown-event
+  "Comprehensive keyboard event handler for block editing"
+  [e uid]
+  (let [key (.. e -key)
+        {:keys [shift meta ctrl alt]} (modifier-keys e)
+        target (.. e -target)
+        {:keys [start end]} (get-selection-offsets target)]
+    
+    (case key
+      "Enter"     (handle-enter e uid shift)
+      "Tab"       (handle-tab e uid shift)
+      "Backspace" (handle-backspace e uid start end)
+      "ArrowUp"   (handle-arrow-navigation e uid :up)
+      "ArrowDown" (handle-arrow-navigation e uid :down)
+      ;; Shortcut combinations
+      (when (and meta (= key "k"))
+        (dispatch [::open-command-palette uid]))
+      (when (and meta shift (= key "k"))
+        (dispatch [::open-block-search uid])))))
+
+;; Caret position utilities
+(defn get-caret-position [textarea]
+  (let [position (.-selectionStart textarea)
+        coordinates (getCaretCoordinates textarea position)]
+    {:position position
+     :left (.-left coordinates)
+     :top (.-top coordinates)
+     :height (.-height coordinates)}))
+```
+
+### Autocomplete and Slash Commands
+```clojure
+;; Slash command system
+(def slash-commands
+  {"date"     {:icon CalendarNowIcon :dispatch [::insert-date]}
+   "time"     {:icon TimeNowIcon :dispatch [::insert-time]}  
+   "todo"     {:icon CheckboxIcon :dispatch [::insert-task]}
+   "template" {:icon TemplateIcon :dispatch [::show-templates]}
+   "embed"    {:icon BlockEmbedIcon :dispatch [::show-block-search]}
+   "youtube"  {:icon YoutubeIcon :dispatch [::insert-youtube]}})
+
+;; Autocomplete trigger patterns
+(defn detect-autocomplete-trigger [text cursor-pos]
+  (let [before-cursor (subs text 0 cursor-pos)]
+    (cond
+      (re-find #"\[\[[^]]*$" before-cursor) :page-search
+      (re-find #"\(\([^)]*$" before-cursor) :block-search  
+      (re-find #"#[^#\s]*$" before-cursor) :tag-search
+      (re-find #"@[^@\s]*$" before-cursor) :user-mention
+      (re-find #"/[^/\s]*$" before-cursor) :slash-command)))
+```
+
+## Graph Database Advanced Patterns
+
+### Complex Datascript Queries
+```clojure
+;; Recursive queries for block hierarchies
+(defn get-block-tree-with-depth [dsdb root-uid max-depth]
+  (d/q '[:find ?uid ?string ?order ?depth
+         :in $ % ?root-uid ?max-depth
+         :where
+         (block-tree ?root-uid ?uid ?depth)
+         [(<= ?depth ?max-depth)]
+         [?e :block/uid ?uid]
+         [?e :block/string ?string]
+         [?e :block/order ?order]]
+       @dsdb
+       '[[(block-tree ?parent ?child 0)
+          [?p :block/uid ?parent]
+          [?p :block/children ?c]
+          [?c :block/uid ?child]]
+         [(block-tree ?parent ?descendant ?depth)
+          (block-tree ?parent ?child ?d1)
+          (block-tree ?child ?descendant ?d2)
+          [(+ ?d1 ?d2 1) ?depth]]]
+       root-uid max-depth))
+
+;; Graph analysis queries
+(defn find-orphaned-blocks [dsdb]
+  "Find blocks that have no parent and aren't pages"
+  (d/q '[:find ?uid
+         :where
+         [?b :block/uid ?uid]
+         (not [?parent :block/children ?b])
+         (not [?b :node/title])]
+       @dsdb))
+
+;; Reference tracking
+(defn get-backlinks [dsdb target-uid]
+  (d/q '[:find ?referrer-uid ?ref-context
+         :in $ ?target-uid
+         :where
+         [?target :block/uid ?target-uid]
+         [?referrer :block/refs ?target]
+         [?referrer :block/uid ?referrer-uid]
+         [?referrer :block/string ?ref-context]]
+       @dsdb target-uid))
+```
+
+### Transaction Optimization
+```clojure
+;; Batched transaction patterns
+(defn batch-block-updates [dsdb updates]
+  "Efficiently update multiple blocks in a single transaction"
+  (let [tx-data (for [{:keys [uid changes]} updates]
+                  (merge {:db/id [:block/uid uid]} changes))]
+    (d/transact! dsdb tx-data)))
+
+;; Conditional transactions
+(defn safe-block-update [dsdb uid update-fn]
+  "Only update block if it exists and passes validation"
+  (when-let [block (d/pull @dsdb '[*] [:block/uid uid])]
+    (let [updated-block (update-fn block)]
+      (when (validate-block-structure updated-block)
+        (d/transact! dsdb [updated-block])))))
+```
+
+## Component Lifecycle and State Management
+
+### Reagent Component Patterns
+```clojure
+;; Component with local state and cleanup
+(defn block-editor-component [block-data]
+  (let [local-state (r/atom {:editing? false :temp-value ""})
+        cleanup-fn (atom nil)]
+    
+    (r/create-class
+     {:component-did-mount
+      (fn [this]
+        (let [node (r/dom-node this)]
+          (reset! cleanup-fn 
+                  (add-event-listener node "keydown" handle-keydown))))
+      
+      :component-will-unmount  
+      (fn [this]
+        (when @cleanup-fn (@cleanup-fn)))
+      
+      :reagent-render
+      (fn [block-data]
+        [:div.block-editor
+         {:class (when (:editing? @local-state) "editing")}
+         [block-content block-data local-state]])})))
+
+;; Higher-order component patterns
+(defn with-presence-tracking [component]
+  "HOC that tracks user presence on component"
+  (fn [props]
+    (let [presence-id (random-uuid)]
+      (r/create-class
+       {:component-did-mount
+        (fn [] (dispatch [::track-presence presence-id]))
+        
+        :component-will-unmount
+        (fn [] (dispatch [::untrack-presence presence-id]))
+        
+        :reagent-render  
+        (fn [props]
+          [component (assoc props :presence-id presence-id)])}))))
+```
+
+### React Hook Integration
+```typescript
+// Custom hooks for Athens-specific functionality
+export const useBlockFocus = (blockUid: string) => {
+  const [isFocused, setIsFocused] = useState(false);
+  
+  useEffect(() => {
+    const handleFocus = (event: CustomEvent) => {
+      setIsFocused(event.detail.uid === blockUid);
+    };
+    
+    document.addEventListener('athens:block-focus', handleFocus);
+    return () => document.removeEventListener('athens:block-focus', handleFocus);
+  }, [blockUid]);
+  
+  return isFocused;
+};
+
+export const useBlockPresence = (blockUid: string) => {
+  const [users, setUsers] = useState([]);
+  
+  useEffect(() => {
+    // Subscribe to presence updates for this block
+    const unsubscribe = subscribeToBlockPresence(blockUid, setUsers);
+    return unsubscribe;
+  }, [blockUid]);
+  
+  return users;
+};
+```
+
+## Testing Strategies and Patterns
+
+### Advanced E2E Test Patterns
+```typescript
+// Page object model for Athens
+export class AthensPage {
+  constructor(private page: Page) {}
+  
+  async createBlock(text: string, parent?: string) {
+    if (parent) {
+      await this.page.click(`[data-uid="${parent}"] .block-bullet`);
+      await this.page.keyboard.press('Tab');
+    } else {
+      await this.page.keyboard.press('Enter');
+    }
+    await this.page.fill('.block-input-textarea >> nth=-1', text);
+  }
+  
+  async navigateToBlock(uid: string) {
+    await this.page.keyboard.press('Meta+K');
+    await this.page.fill('[data-testid="athena-input"]', `((${uid}))`);
+    await this.page.keyboard.press('Enter');
+  }
+  
+  async waitForBlockToLoad(uid: string) {
+    await this.page.waitForSelector(`[data-uid="${uid}"]`);
+  }
+  
+  async getBlockText(uid: string): Promise<string> {
+    return this.page.textContent(`[data-uid="${uid}"] .block-content`);
+  }
+}
+
+// Integration test patterns
+test.describe('Block operations', () => {
+  let athens: AthensPage;
+  
+  test.beforeEach(async ({ page }) => {
+    athens = new AthensPage(page);
+    await page.goto('/');
+    await athens.waitForAppToLoad();
+  });
+  
+  test('hierarchical block creation and navigation', async () => {
+    const parentUid = await athens.createBlock('Parent block');
+    const childUid = await athens.createBlock('Child block', parentUid);
+    
+    await athens.navigateToBlock(childUid);
+    await expect(athens.getBlockText(childUid)).toBe('Child block');
+    
+    // Verify parent-child relationship
+    const parentText = await athens.getBlockText(parentUid);
+    expect(parentText).toBe('Parent block');
+  });
+});
+```
+
+### Property-Based Testing
+```clojure
+;; Property-based tests for graph operations
+(defspec block-operations-preserve-graph-integrity
+  100
+  (prop/for-all [operations (gen/vector graph-operation-gen 1 10)]
+    (let [initial-db (create-test-db)
+          final-db (reduce apply-operation initial-db operations)]
+      (and (valid-graph-structure? final-db)
+           (no-orphaned-blocks? final-db)
+           (consistent-references? final-db)))))
+
+;; Generators for Athens data structures
+(def block-gen
+  (gen/let [uid gen/string-alphanumeric
+            string gen/string
+            order gen/nat]
+    {:block/uid uid
+     :block/string string  
+     :block/order order}))
+```
+
 Remember: This is a complex, mature codebase with many interconnected parts. When making changes, consider the impact on the graph data structure, Re-frame state flow, and user experience patterns established throughout the application.
