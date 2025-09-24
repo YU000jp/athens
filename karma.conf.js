@@ -9,6 +9,8 @@ module.exports = function (config) {
       '../node_modules/cldrjs/dist/cldr.js',
       // Initialize CLDR with minimal required data  
       '../cldr-init.js',
+      // Provide fallback mock if CLDR loading fails
+      '../cldr-mock.js',
       // Main test file
       'karma-test.js'
     ],
