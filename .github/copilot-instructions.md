@@ -268,4 +268,575 @@ test('can create and edit a block', async ({ page }) => {
 - Implement proper error handling for network requests
 - Cache data appropriately in app state
 
+## Athens-Specific Utilities and Helpers
+
+### Block Manipulation Utilities
+```clojure
+;; Key utilities in athens.util namespace
+(defn embed-uid->original-uid 
+  "Converts embed block UID back to original"
+  [uid])
+
+(defn recursively-modify-block-for-embed
+  "Modifies block tree for embedding context"
+  [block embed-id])
+
+(defn get-caret-position
+  "Gets cursor position in block editor"
+  [textarea])
+```
+
+### Pattern Matching and Text Processing
+```clojure
+;; athens.patterns namespace for content parsing
+(defn date [str]
+  "Matches date patterns like '02-14-2023'"
+  (re-find #"(?=\d{2}-\d{2}-\d{4}).*" str))
+
+(defn date-block-string [str] 
+  "Matches full date strings like 'February 14th, 2023'"
+  (re-find #"\b(?:January|February|...|December)\s\d{1,2}(?:st|nd|rd|th),\s\d{4}\b" str))
+
+(defn block-ref? [str]
+  "Checks if string contains block reference ((uid))"
+  (re-find #"\(\([a-zA-Z0-9_-]+\)\)" str))
+
+(defn page-ref? [str]
+  "Checks if string contains page reference [[title]]"
+  (re-find #"\[\[.*\]\]" str))
+```
+
+### Graph Traversal and Analysis
+```clojure
+;; Common graph operations
+(defn get-block-ancestry
+  "Gets all parent blocks up to page level"
+  [dsdb uid])
+
+(defn get-block-descendants
+  "Gets all child blocks recursively"  
+  [dsdb uid])
+
+(defn find-shortest-path
+  "Finds connection path between two blocks"
+  [dsdb from-uid to-uid])
+
+(defn get-orphaned-blocks
+  "Finds blocks with no parents (potential data issues)"
+  [dsdb])
+```
+
+## Development Workflow Specifics
+
+### Hot Reloading and Development
+```bash
+# Start development with hot reloading
+yarn dev  # Starts shadow-cljs with :app, :renderer, :main builds
+
+# Available dev URLs
+http://localhost:3000      # Web client
+http://localhost:9630      # Shadow-CLJS dashboard
+http://localhost:8777      # nREPL server
+```
+
+### Code Quality Tools Configuration
+```clojure
+;; .clj-kondo/config.edn - Linting rules
+{:linters {:unresolved-namespace {:exclude [clojure.string]}
+           :unused-referred-var {:exclude {clojure.test [is deftest testing]}}
+           :unsorted-required-namespaces {:level :warning}}
+ :lint-as {day8.re-frame.tracing/fn-traced clojure.core/fn
+           reagent.core/with-let clojure.core/let}}
+```
+
+### Build Optimization Flags
+```clojure
+;; shadow-cljs.edn development settings
+:dev {:compiler-options 
+      {:closure-defines {re-frame.trace.trace-enabled? true
+                        day8.re-frame.tracing.trace-enabled? true
+                        goog.DEBUG true}
+       :warnings {:redef false}}}
+
+;; Production optimizations  
+:release {:build-options 
+          {:ns-aliases {day8.re-frame.tracing day8.re-frame.tracing-stubs}}}
+```
+
+## Athens UI/UX Patterns
+
+### Block Editor Behavior
+```clojure
+;; Key bindings and interactions
+:enter     -> Create new block
+:shift+enter -> New line within block  
+:tab       -> Indent block (make child)
+:shift+tab -> Unindent block (move up level)
+:backspace -> Delete block if empty, merge with previous if at start
+:cmd+k     -> Quick block search and navigation
+:cmd+j     -> Jump to date page
+```
+
+### Search and Navigation
+```clojure
+;; Athens search patterns (Athena)
+"[[page name"    -> Search for page by name
+"((block content" -> Search for block by content  
+"TODO:"          -> Search for task blocks
+"/template"      -> Insert template
+"/date"          -> Insert date reference
+```
+
+### Keyboard Navigation Conventions
+```clojure
+;; Block selection and editing
+(rf/reg-event-fx
+  ::navigate-block
+  (fn [{:keys [db]} [_ direction uid]]
+    (case direction
+      :up    (focus-previous-block uid)
+      :down  (focus-next-block uid) 
+      :left  (move-to-parent uid)
+      :right (move-to-first-child uid))))
+```
+
+## Error Handling and Monitoring
+
+### Sentry Integration Patterns
+```clojure
+;; Error boundary for React components
+(defn error-boundary [component]
+  [re-com/error-boundary
+   {:on-error (fn [error info]
+                (sentry/capture-exception error info))}
+   component])
+
+;; Traced functions for performance monitoring
+(sentry-m/defntrace expensive-operation
+  [large-data]
+  ;; Function automatically gets tracing
+  (process-large-dataset large-data))
+```
+
+### Database Integrity Checks
+```clojure
+;; Validation functions
+(defn validate-block-structure [block]
+  (and (:block/uid block)
+       (:block/string block)
+       (or (nil? (:block/children block))
+           (every? #(contains? % :block/uid) (:block/children block)))))
+
+(defn check-graph-consistency [dsdb]
+  ;; Verify all block references point to existing blocks
+  ;; Check for orphaned blocks
+  ;; Validate parent-child relationships
+  )
+```
+
+## Advanced ClojureScript Techniques
+
+### Macro Usage in Athens
+```clojure
+;; Common macro patterns used in Athens
+(athens.common.sentry/defntrace function-name
+  "Automatically traces function execution"
+  [args]
+  body)
+
+(day8.re-frame.tracing/fn-traced 
+  "Traces anonymous function execution"
+  [args] 
+  body)
+```
+
+### Specter for Data Transformation
+```clojure
+;; Advanced data manipulation with Specter
+(:require [com.rpl.specter :as s])
+
+(defn update-blocks-recursively [block-tree transform-fn]
+  (s/transform 
+    (specter-recursive-path #(contains? % :block/children))
+    transform-fn
+    block-tree))
+
+(defn find-blocks-with-property [blocks property-key]
+  (s/select 
+    [s/ALL 
+     (s/pred #(contains? (:block/properties %) property-key))]
+    blocks))
+```
+
+## Mobile and Responsive Considerations
+
+### Chakra UI Responsive Props
+```clojure
+;; Responsive design patterns
+[:> Box {:width {:base "100%" :md "80%" :lg "60%"}
+         :padding {:base 2 :md 4 :lg 6}
+         :fontSize {:base "sm" :md "md" :lg "lg"}}]
+
+;; Mobile-specific block editing
+(defn mobile-block-editor [block]
+  [:div.mobile-editor
+   {:style {:touch-action "manipulation"  ;; Better mobile scrolling
+            :user-select "text"}}         ;; Allow text selection
+   [block-content block]])
+```
+
+### Touch and Gesture Handling
+```typescript
+// Mobile gesture patterns in TypeScript components
+export const BlockDrag = ({ block, onDrag }: BlockDragProps) => {
+  const sensors = useSensors(
+    useSensor(PointerSensor, {
+      activationConstraint: {
+        distance: 8, // Minimum drag distance
+      },
+    })
+  );
+  
+  return (
+    <DragOverlay>
+      <BlockComponent block={block} />
+    </DragOverlay>
+  );
+};
+```
+
+## Athens-Specific Domain Concepts
+
+### Block and Page System
+Athens is built around a hierarchical block-based structure where every piece of content is a block:
+
+```clojure
+;; Core block structure
+{:db/id 123
+ :block/uid "abc123def"           ;; Unique identifier (9-char random string)
+ :block/string "Block content"    ;; The actual text content
+ :block/order 0                   ;; Position among siblings
+ :block/children [{:db/id 124}]   ;; References to child blocks
+ :block/refs [{:db/id 125}]       ;; References to other blocks/pages
+ :block/open? true}               ;; Whether block is expanded
+
+;; Page structure (special kind of block)
+{:db/id 456
+ :node/title "Page Title"         ;; Page title (unique)
+ :block/children [{:db/id 123}]}  ;; Top-level blocks in the page
+```
+
+### Block References and Bidirectional Linking
+```clojure
+;; Block reference syntax in content: ((block-uid))
+;; Page reference syntax in content: [[Page Title]]
+;; Both create bidirectional links automatically
+
+;; Query for backlinks to a page
+(d/q '[:find ?b
+       :in $ ?title
+       :where
+       [?page :node/title ?title]
+       [?b :block/refs ?page]]
+     @dsdb "Target Page")
+```
+
+### Property System (v2+ Schema)
+```clojure
+;; Properties are special block relationships
+{:db/id 789
+ :block/property-of {:db/id 123}  ;; Parent block
+ :block/key {:db/id 456}          ;; Property name (references another block)
+ :block/string "Property value"}   ;; Property value
+
+;; Query properties of a block
+(d/q '[:find ?key-title ?value
+       :in $ ?block-id
+       :where
+       [?prop :block/property-of ?block-id]
+       [?prop :block/key ?key]
+       [?key :node/title ?key-title]
+       [?prop :block/string ?value]]
+     @dsdb block-id)
+```
+
+## Advanced Architectural Patterns
+
+### 1. Datascript Query Patterns
+```clojure
+;; Common queries used throughout Athens
+(defn get-block-document
+  "Gets complete block tree starting from root"
+  [dsdb uid]
+  (d/pull @dsdb '[* {:block/children ...}] [:block/uid uid]))
+
+(defn get-parents-recursively
+  "Gets all parent blocks up to page level"
+  [dsdb uid]
+  (d/q '[:find ?parent-uid
+         :in $ % ?uid
+         :where
+         (parent ?uid ?parent-uid)]
+       @dsdb parent-rules uid))
+
+;; Recursive rule for parent traversal
+(def parent-rules
+  '[[(parent ?child-uid ?parent-uid)
+     [?child :block/uid ?child-uid]
+     [?parent :block/children ?child]
+     [?parent :block/uid ?parent-uid]]
+    [(parent ?child-uid ?ancestor-uid)
+     (parent ?child-uid ?parent-uid)
+     (parent ?parent-uid ?ancestor-uid)]])
+```
+
+### 2. Graph Operations and Transactions
+```clojure
+;; Atomic operations for graph changes
+(ns athens.common-events.graph.ops)
+
+(defn create-block-op
+  "Creates a new block with proper relationships"
+  [{:keys [new-uid parent-uid order string]}]
+  {:block/uid new-uid
+   :block/string string
+   :block/order order
+   :create/time (common.utils/now-ts)})
+
+(defn move-block-op
+  "Moves block between locations atomically"
+  [source-uid target-parent-uid new-order]
+  ;; Complex transaction handling parent updates,
+  ;; order adjustments, and reference maintenance
+  )
+```
+
+### 3. Re-frame Effect Patterns
+```clojure
+;; Custom effects for Athens operations
+(rf/reg-fx
+  :transact!
+  (fn [tx-data]
+    (d/transact! @athens.db/dsdb tx-data)))
+
+(rf/reg-fx
+  :dispatch-debounced
+  (fn [{:keys [key dispatch timeout]}]
+    ;; Debounced dispatch for search/autosave
+    ))
+
+;; Event with multiple effects
+(rf/reg-event-fx
+  ::create-block-and-focus
+  (fn [{:keys [db]} [_ parent-uid position text]]
+    (let [new-uid (athens.util/gen-block-uid)
+          block-op (create-block-op {:new-uid new-uid 
+                                     :parent-uid parent-uid
+                                     :order position
+                                     :string text})]
+      {:transact! [block-op]
+       :dispatch [::focus-block new-uid]
+       :fx [[:dispatch-later [{:ms 100 
+                               :dispatch [::update-selection-state]}]]]})))
+```
+
+### 4. Component Composition Patterns
+```clojure
+;; Higher-order component for block editing
+(defn with-block-editing [component]
+  (fn [props]
+    (let [editing? (rf/subscribe [:editing/uid (:block/uid props)])]
+      [component (assoc props :editing? @editing?)])))
+
+;; Block component with editing state
+(defn block-component
+  [{:block/keys [uid string children] :as block}]
+  [:div.block
+   [block-bullet block]
+   [block-content block]
+   (when-not (empty? children)
+     [:div.block-children
+      (for [child children]
+        ^{:key (:block/uid child)}
+        [block-component child])])])
+```
+
+### 5. Selection and Focus Management
+```clojure
+;; Selection state management
+(rf/reg-sub
+  :selection/blocks
+  (fn [db _]
+    (get-in db [:selection :blocks])))
+
+(rf/reg-event-fx
+  ::select-block-range
+  (fn [{:keys [db]} [_ start-uid end-uid]]
+    (let [block-range (get-blocks-between start-uid end-uid)]
+      {:db (assoc-in db [:selection :blocks] block-range)
+       :dispatch [::update-selection-ui]})))
+```
+
+## Configuration and Build Patterns
+
+### Shadow-CLJS Configuration
+```clojure
+;; Key shadow-cljs.edn patterns
+{:builds {
+   :app {:target :browser
+         :modules {:app {:init-fn athens.core/init}}
+         :dev {:compiler-options 
+               {:closure-defines {re-frame.trace.trace-enabled? true}
+                :warnings {:redef false}}}
+         :release {:build-options 
+                   {:ns-aliases {day8.re-frame.tracing day8.re-frame.tracing-stubs}}}}}}
+```
+
+### Babel Configuration for React/TypeScript
+```javascript
+// Key patterns in babel.config.js
+module.exports = {
+  plugins: [
+    // Custom plugin for Shadow-CLJS compatibility
+    replaceDirectoryImports,
+    // Module resolution for component library
+    ["module-resolver", {alias: {"@": "./src/js/components"}}]
+  ]
+}
+```
+
+### ClojureScript Interop Best Practices
+```clojure
+;; Importing npm modules
+(:require ["@chakra-ui/react" :as chakra :refer [Box Button]])
+
+;; Using React components in Reagent
+[:> chakra/Button {:onClick handle-click 
+                   :variant "outline"} 
+ "Click me"]
+
+;; Converting between JS and ClojureScript data
+(defn js-props->clj [js-props]
+  (js->clj js-props :keywordize-keys true))
+
+(defn clj-data->js [clj-data]
+  (clj->js clj-data))
+```
+
+## Testing Patterns and Examples
+
+### Datascript Database Testing
+```clojure
+(deftest block-creation-test
+  (testing "creating a new block updates graph correctly"
+    (let [conn (d/create-conn schema)
+          parent-uid "parent123"
+          new-uid "child456"]
+      
+      ;; Setup: Create parent block
+      (d/transact! conn [{:block/uid parent-uid
+                          :block/string "Parent"}])
+      
+      ;; Action: Add child block
+      (d/transact! conn [{:block/uid new-uid
+                          :block/string "Child"
+                          :block/order 0}
+                         {:db/id [:block/uid parent-uid]
+                          :block/children [[:block/uid new-uid]]}])
+      
+      ;; Assert: Verify relationships
+      (let [parent (d/pull @conn '[* {:block/children [*]}] 
+                          [:block/uid parent-uid])]
+        (is (= 1 (count (:block/children parent))))
+        (is (= new-uid (-> parent :block/children first :block/uid)))))))
+```
+
+### E2E Testing Patterns
+```typescript
+// Playwright patterns specific to Athens
+test('block editing and navigation', async ({ page }) => {
+  await page.goto('/');
+  
+  // Wait for Athens to initialize
+  await page.waitForSelector('[data-testid="app-container"]');
+  
+  // Create a new block
+  await page.keyboard.press('Enter');
+  await page.fill('[data-testid="block-input"]', 'Test block content');
+  
+  // Verify block creation
+  await expect(page.locator('.block-content')).toContainText('Test block content');
+  
+  // Test block navigation
+  await page.keyboard.press('ArrowUp');
+  await expect(page.locator('.block-editor-active')).toBeVisible();
+});
+```
+
+## Performance and Optimization
+
+### Subscription Optimization
+```clojure
+;; Efficient subscriptions using path-based queries
+(rf/reg-sub
+  :block/string
+  (fn [db [_ uid]]
+    ;; Direct path lookup instead of full query
+    (get-in db [:athens/dsdb-data :block/uid uid :block/string])))
+
+;; Memoized subscriptions for expensive computations
+(rf/reg-sub
+  :block/children-sorted
+  :<- [:block/children]
+  (fn [children _]
+    (sort-by :block/order children)))
+```
+
+### React Component Optimization
+```typescript
+// Memoized React components
+export const BlockComponent = React.memo(({ block, depth }) => {
+  // Only re-render when block data or depth changes
+  return (
+    <div className="block" style={{ marginLeft: `${depth * 20}px` }}>
+      {block.string}
+    </div>
+  );
+}, (prevProps, nextProps) => {
+  return prevProps.block.uid === nextProps.block.uid && 
+         prevProps.depth === nextProps.depth;
+});
+```
+
+## Common Gotchas and Solutions
+
+### 1. UID Generation and Uniqueness
+```clojure
+;; Always use Athens' UID generation
+(defn gen-block-uid []
+  (random-uuid))  ;; 9-character random string
+
+;; Don't create blocks without proper UIDs
+```
+
+### 2. Datascript Transaction Ordering
+```clojure
+;; Transactions must be in correct order for references
+[{:block/uid "parent"}     ;; Create parent first
+ {:block/uid "child"}      ;; Create child second  
+ {:db/id [:block/uid "parent"]
+  :block/children [[:block/uid "child"]]}]  ;; Link them third
+```
+
+### 3. Re-frame Subscription Dependencies
+```clojure
+;; Use :<- syntax for dependent subscriptions
+(rf/reg-sub
+  :derived-data
+  :<- [:base-data]
+  :<- [:other-data]  
+  (fn [[base-data other-data] _]
+    (combine base-data other-data)))
+```
+
 Remember: This is a complex, mature codebase with many interconnected parts. When making changes, consider the impact on the graph data structure, Re-frame state flow, and user experience patterns established throughout the application.
