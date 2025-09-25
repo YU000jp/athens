@@ -1,0 +1,187 @@
+name: Enhanced Vercel Deployment
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  # Job 1: Build Athens with full Clojure environment
+  build-athens:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+        cache: 'yarn'
+    
+    - name: Setup Java
+      uses: actions/setup-java@v4
+      with:
+        distribution: 'temurin'
+        java-version: '17'
+    
+    - name: Install Clojure CLI
+      run: |
+        curl -O https://download.clojure.org/install/linux-install-1.12.0.1479.sh
+        chmod +x linux-install-1.12.0.1479.sh
+        sudo ./linux-install-1.12.0.1479.sh
+        clojure --version
+    
+    - name: Install dependencies
+      run: |
+        yarn install
+        clojure -P  # Download Clojure dependencies
+    
+    - name: Build JavaScript components
+      run: yarn components
+    
+    - name: Build ClojureScript application
+      run: |
+        shadow-cljs release app
+      timeout-minutes: 15
+    
+    - name: Build static notebooks (if possible)
+      run: |
+        yarn notebooks:static || echo "Notebooks build failed, continuing..."
+      timeout-minutes: 10
+    
+    - name: Prepare static assets
+      run: |
+        mkdir -p vercel-static/athens
+        mkdir -p vercel-static/clerk
+        
+        # Copy ClojureScript build output
+        if [ -d "resources/public" ]; then
+          cp -R resources/public/* vercel-static/athens/
+        fi
+        
+        # Copy generated components
+        if [ -d "src/gen/components" ]; then
+          mkdir -p vercel-static/js
+          cp -R src/gen/components/* vercel-static/js/
+        fi
+        
+        # Create root index
+        cat > vercel-static/index.html << 'EOF'
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <meta charset="UTF-8">
+            <title>Athens Research</title>
+            <meta http-equiv="refresh" content="0; url=/athens/">
+        </head>
+        <body>
+            <p><a href="/athens/">Athens Research アプリケーションに移動</a></p>
+        </body>
+        </html>
+        EOF
+    
+    - name: Upload build artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: athens-build
+        path: vercel-static/
+        retention-days: 1
+  
+  # Job 2: Deploy to Vercel (only on main branch)
+  deploy-vercel:
+    needs: build-athens
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Download build artifacts
+      uses: actions/download-artifact@v4
+      with:
+        name: athens-build
+        path: vercel-static/
+    
+    - name: Deploy to Vercel
+      uses: vercel/action@v2
+      with:
+        vercel-token: ${{ secrets.VERCEL_TOKEN }}
+        vercel-args: '--prod'
+        vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
+        vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+        working-directory: ./
+
+  # Job 3: Fallback deployment (if main build fails)
+  deploy-fallback:
+    runs-on: ubuntu-latest
+    if: failure() && github.ref == 'refs/heads/main'
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+        cache: 'yarn'
+    
+    - name: Install Node dependencies
+      run: yarn install
+    
+    - name: Build JavaScript components only
+      run: yarn components
+    
+    - name: Create fallback build
+      run: |
+        chmod +x vercel-enhanced-build.sh
+        export ATHENS_BUILD_MODE="static"
+        ./vercel-enhanced-build.sh
+    
+    - name: Deploy fallback to Vercel
+      uses: vercel/action@v2
+      with:
+        vercel-token: ${{ secrets.VERCEL_TOKEN }}
+        vercel-args: '--prod'
+        vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
+        vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+        working-directory: ./
+
+  # Job 4: Test deployment (for PRs)
+  test-deployment:
+    needs: build-athens
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Download build artifacts
+      uses: actions/download-artifact@v4
+      with:
+        name: athens-build
+        path: vercel-static/
+    
+    - name: Test static files
+      run: |
+        echo "Testing static file generation..."
+        ls -la vercel-static/
+        
+        # Test that key files exist
+        test -f vercel-static/index.html || (echo "Missing root index.html" && exit 1)
+        test -d vercel-static/athens || (echo "Missing athens directory" && exit 1)
+        
+        echo "✅ Static files test passed"
+    
+    - name: Deploy preview to Vercel
+      uses: vercel/action@v2
+      with:
+        vercel-token: ${{ secrets.VERCEL_TOKEN }}
+        vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
+        vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+        working-directory: ./

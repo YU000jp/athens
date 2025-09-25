@@ -59,10 +59,14 @@ The fix has been validated to:
 
 If you encounter CLDR-related issues:
 
-1. Check browser console for CLDR initialization messages
-2. Verify `cldrjs` and `cldr-data` npm packages are installed
-3. Update CLDR data in `cldr-init.js` if new locale support is needed
-4. Extend mock in `cldr-mock.js` if additional CLDR methods are required
+1. **Run the diagnostic tool:** `node verify-cldr-fix.js`
+2. **Check browser console** for CLDR initialization messages
+3. **Consult the troubleshooting guide:** See `CLDR_TROUBLESHOOTING.md` for detailed solutions
+4. Verify `cldrjs` and `cldr-data` npm packages are installed
+5. Update CLDR data in `cldr-init.js` if new locale support is needed
+6. Extend mock in `cldr-mock.js` if additional CLDR methods are required
+
+For detailed troubleshooting steps, see [CLDR_TROUBLESHOOTING.md](./CLDR_TROUBLESHOOTING.md).
 
 ## Related Dependencies
 

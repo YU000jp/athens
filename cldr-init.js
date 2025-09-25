@@ -14,11 +14,12 @@
   if (typeof window !== 'undefined' && typeof window.Cldr === 'function') {
     try {
       // Load minimal required CLDR supplemental data
+      // Using more recent CLDR data versions for better compatibility
       window.Cldr.load({
         "supplemental": {
           "version": {
-            "_unicodeVersion": "12.0.0",
-            "_cldrVersion": "36"
+            "_unicodeVersion": "15.1.0",  // Updated Unicode version
+            "_cldrVersion": "45"          // Updated CLDR version
           },
           "likelySubtags": {
             "en": "en-Latn-US"
@@ -39,22 +40,45 @@
     } catch (error) {
       console.error('Failed to load CLDR data:', error);
       
-      // Provide a fallback Cldr.load function if the library is not working properly
+      // Enhanced fallback with better error reporting
       if (typeof window.Cldr.load !== 'function') {
+        console.warn('CLDR.load function not available, providing fallback implementation');
         window.Cldr.load = function(data) {
-          console.warn('Using fallback Cldr.load implementation');
+          console.warn('Using fallback Cldr.load implementation for data:', 
+                      data && typeof data === 'object' ? Object.keys(data) : data);
           return data;
+        };
+      }
+      
+      // Additional fallback methods that might be needed
+      if (window.Cldr && typeof window.Cldr.prototype === 'undefined') {
+        window.Cldr.prototype = {
+          get: function(path) {
+            console.warn('Using fallback Cldr.get for path:', path);
+            return {};
+          }
         };
       }
     }
   } else if (typeof window !== 'undefined') {
-    // If Cldr is not available, provide a minimal mock
-    console.warn('Cldr not found, providing minimal mock implementation');
+    // If Cldr is not available, provide a minimal mock with better logging
+    console.warn('Cldr not found, providing enhanced minimal mock implementation');
     window.Cldr = {
       load: function(data) {
-        console.log('Mock Cldr.load called with:', data);
+        console.log('Mock Cldr.load called with data keys:', 
+                   data && typeof data === 'object' ? Object.keys(data) : 'unknown');
         return data;
+      },
+      // Add additional methods that might be called
+      prototype: {
+        get: function(path) {
+          console.warn('Mock Cldr.get called for path:', path);
+          return {};
+        }
       }
     };
+  } else {
+    // Node.js environment - log but don't create window objects
+    console.log('CLDR init: Running in Node.js environment, window not available');
   }
 })();

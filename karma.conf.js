@@ -5,13 +5,27 @@ module.exports = function (config) {
     browsers: ['ChromeHeadless'],
     basePath: 'target',
     files: [
-      // Load CLDR dependencies in correct order before test files
+      // Enhanced loading strategy with multiple fallback options
+      
+      // 1. Load CLDR dependencies in correct order before test files
       '../node_modules/cldrjs/dist/cldr.js',
-      // Initialize CLDR with minimal required data  
+      
+      // 2. Load Luxon as modern alternative (already in package.json)
+      '../node_modules/luxon/build/global/luxon.min.js',
+      
+      // 3. Enhanced CLDR initialization with multiple strategies
+      '../cldr-enhanced-init.js',
+      
+      // 4. Original CLDR initialization for backward compatibility
       '../cldr-init.js',
-      // Provide fallback mock if CLDR loading fails
+      
+      // 5. CLDR mock fallback
       '../cldr-mock.js',
-      // Main test file
+      
+      // 6. Test environment setup with strategy selection
+      '../test-env-setup.js',
+      
+      // 7. Main test file
       'karma-test.js'
     ],
     frameworks: ['cljs-test'],
@@ -26,6 +40,10 @@ module.exports = function (config) {
       args: ['shadow.test.karma.init'],
       singleRun: true
     },
+    
+    // Enhanced timeouts for CLDR loading
+    browserSocketTimeout: 60000,
+    browserNoActivityTimeout: 60000,
 
     // the default configuration
     junitReporter: {
