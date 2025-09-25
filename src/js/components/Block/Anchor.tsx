@@ -1,5 +1,5 @@
 import React, { ReactNode } from 'react';
-import { IconButton, useMergeRefs } from '@chakra-ui/react';
+import { IconButton, useMergeRefs, ButtonProps } from '@chakra-ui/react';
 import { ColonIcon, BulletIcon, DashIcon } from '@/Icons/Icons';
 
 const ANCHORS = {

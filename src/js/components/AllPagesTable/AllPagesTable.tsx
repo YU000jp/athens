@@ -1,6 +1,6 @@
 import React from 'react';
 import { ChevronDownIcon, ChevronUpIcon } from '@/Icons/Icons';
-import { FixedSizeList as List } from 'react-window';
+import { FixedSizeList } from 'react-window';
 import { Button, Box, Table, Thead, Tbody, Th, Td, Tr } from '@chakra-ui/react';
 
 const DISPLAY_TITLES = {
@@ -197,7 +197,7 @@ export const AllPagesTable = ({ sortedPages, onClickItem, sortedBy, sortDirectio
           }
         }}
       >
-        <List
+        <FixedSizeList
           height={containerHeight}
           itemCount={rows.length}
           itemSize={52}
@@ -212,7 +212,7 @@ export const AllPagesTable = ({ sortedPages, onClickItem, sortedBy, sortDirectio
           }}
         >
           {Row}
-        </List>
+        </FixedSizeList>
       </Tbody>
     </Table>
   </Box >

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button, Box, Table, Thead, Tbody, Th, Td, Tr, Tfoot, textDecoration, Text, Link } from '@chakra-ui/react';
-import { AddCardButton } from '../KanbanBoard/KanbanBoard'
+import { AddCardButton } from './KanbanBoard'
 import { ChevronDownIcon, ChevronUpIcon } from '@/Icons/Icons';
 
 

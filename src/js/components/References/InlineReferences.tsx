@@ -1,3 +1,4 @@
+import React from 'react';
 import { ChevronRightIcon } from '@/Icons/Icons';
 import { Button, Box, useDisclosure, Collapse, Text, VStack, HStack } from '@chakra-ui/react';
 import { withErrorBoundary } from 'react-error-boundary';
