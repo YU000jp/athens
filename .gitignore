@@ -60,3 +60,6 @@ vercel-static/*
 vercel-release/*
 !vercel-release/package.json
 test-repo-config.sh
+clojure-tools/
+clojure-tools-*.tar.gz
+linux-install-*.sh
