@@ -106,7 +106,18 @@ jobs:
         name: athens-build
         path: vercel-static/
     
+    - name: Check Vercel secrets
+      id: check-secrets
+      run: |
+        if [ -z "${{ secrets.VERCEL_TOKEN }}" ] || [ -z "${{ secrets.VERCEL_ORG_ID }}" ] || [ -z "${{ secrets.VERCEL_PROJECT_ID }}" ]; then
+          echo "::notice::Missing Vercel secrets. Skipping Vercel deployment."
+          echo "has_secrets=false" >> $GITHUB_OUTPUT
+        else
+          echo "has_secrets=true" >> $GITHUB_OUTPUT
+        fi
+    
     - name: Deploy to Vercel
+      if: steps.check-secrets.outputs.has_secrets == 'true'
       uses: amondnet/vercel-action@v25.2.0
       with:
         vercel-token: ${{ secrets.VERCEL_TOKEN }}
@@ -114,6 +125,18 @@ jobs:
         vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
         vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
         working-directory: ./
+    
+    - name: Alternative deployment info
+      if: steps.check-secrets.outputs.has_secrets == 'false'
+      run: |
+        echo "::warning::Vercel deployment skipped due to missing secrets."
+        echo "To enable Vercel deployment, add the following secrets to your repository:"
+        echo "- VERCEL_TOKEN: Your Vercel API token"
+        echo "- VERCEL_ORG_ID: Your Vercel organization ID"  
+        echo "- VERCEL_PROJECT_ID: Your Vercel project ID"
+        echo ""
+        echo "Built files are available in: ./vercel-static/"
+        echo "For manual deployment, see: VERCEL_DEPLOYMENT_GUIDE.md"
 
   # Job 3: Fallback deployment (if main build fails)
   deploy-fallback:
@@ -142,7 +165,18 @@ jobs:
         export ATHENS_BUILD_MODE="static"
         ./vercel-enhanced-build.sh
     
+    - name: Check Vercel secrets
+      id: check-secrets
+      run: |
+        if [ -z "${{ secrets.VERCEL_TOKEN }}" ] || [ -z "${{ secrets.VERCEL_ORG_ID }}" ] || [ -z "${{ secrets.VERCEL_PROJECT_ID }}" ]; then
+          echo "::notice::Missing Vercel secrets. Skipping fallback Vercel deployment."
+          echo "has_secrets=false" >> $GITHUB_OUTPUT
+        else
+          echo "has_secrets=true" >> $GITHUB_OUTPUT
+        fi
+    
     - name: Deploy fallback to Vercel
+      if: steps.check-secrets.outputs.has_secrets == 'true'
       uses: amondnet/vercel-action@v25.2.0
       with:
         vercel-token: ${{ secrets.VERCEL_TOKEN }}
@@ -150,6 +184,14 @@ jobs:
         vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
         vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
         working-directory: ./
+    
+    - name: Fallback deployment info
+      if: steps.check-secrets.outputs.has_secrets == 'false'
+      run: |
+        echo "::warning::Fallback Vercel deployment skipped due to missing secrets."
+        echo "Fallback static build completed successfully."
+        echo "Files are available for manual deployment."
+        echo "See: VERCEL_DEPLOYMENT_GUIDE.md for manual deployment instructions."
 
   # Job 4: Test deployment (for PRs)
   test-deployment:
@@ -178,10 +220,28 @@ jobs:
         
         echo "✅ Static files test passed"
     
+    - name: Check Vercel secrets
+      id: check-secrets
+      run: |
+        if [ -z "${{ secrets.VERCEL_TOKEN }}" ] || [ -z "${{ secrets.VERCEL_ORG_ID }}" ] || [ -z "${{ secrets.VERCEL_PROJECT_ID }}" ]; then
+          echo "::notice::Missing Vercel secrets. Skipping preview deployment."
+          echo "has_secrets=false" >> $GITHUB_OUTPUT
+        else
+          echo "has_secrets=true" >> $GITHUB_OUTPUT
+        fi
+    
     - name: Deploy preview to Vercel
+      if: steps.check-secrets.outputs.has_secrets == 'true'
       uses: amondnet/vercel-action@v25.2.0
       with:
         vercel-token: ${{ secrets.VERCEL_TOKEN }}
         vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
         vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
         working-directory: ./
+    
+    - name: Preview deployment info
+      if: steps.check-secrets.outputs.has_secrets == 'false'
+      run: |
+        echo "::notice::Preview deployment skipped due to missing secrets."
+        echo "Static files have been tested and are ready for deployment."
+        echo "Build artifacts can be downloaded and deployed manually."
