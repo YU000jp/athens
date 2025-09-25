@@ -7,9 +7,8 @@
   "sonatype"  {:url "https://oss.sonatype.org/content/repositories/public/"}
   "maven2"    {:url "https://repo.maven.apache.org/maven2/"}
   "jcenter"   {:url "https://jcenter.bintray.com/"}
-  ;; Clojars commented out for restricted environments
-  ;; Uncomment if access becomes available
-  ;;"clojars"   {:url "https://repo.clojars.org/"}
+  ;; Clojars needed for some tools like carve
+  "clojars"   {:url "https://repo.clojars.org/"}
   }
 
  :deps
@@ -147,10 +146,10 @@
   {:extra-deps {com.github.liquidz/antq #:mvn{:version "2.0.1066"}}
    :main-opts ["-m" "antq.core"]}
 
-  ;; Dead code elimination
-  :carve
-  {:extra-deps {borkdude/carve #:mvn{:version "0.3.5"}}
-   :main-opts ["-m" "carve.main"]}
+  ;; Dead code elimination (temporarily disabled due to dependency resolution issues)
+  ;; :carve
+  ;; {:extra-deps {borkdude/carve #:mvn{:version "0.3.5"}}
+  ;;  :main-opts ["-m" "carve.main"]}
 
   ;; Athens-specific aliases
   :athens
