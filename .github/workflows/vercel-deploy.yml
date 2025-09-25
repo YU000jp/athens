@@ -44,7 +44,7 @@ jobs:
     
     - name: Build ClojureScript application
       run: |
-        shadow-cljs release app
+        yarn components && clojure -M:shadow-cljs release app
       timeout-minutes: 15
     
     - name: Build static notebooks (if possible)
