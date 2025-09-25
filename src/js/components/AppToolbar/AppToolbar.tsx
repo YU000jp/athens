@@ -30,7 +30,7 @@ import {
 } from '@chakra-ui/react';
 
 import { AnimatePresence, motion } from 'framer-motion';
-import { LayoutContext, layoutAnimationProps, layoutAnimationTransition } from "@/Layout/useLayoutState";
+import { LayoutContext, layoutAnimationProps, layoutAnimationTransition } from '@/Layout/useLayoutState';
 import { FakeTrafficLights } from './components/FakeTrafficLights';
 import { WindowButtons } from './components/WindowButtons';
 import { LocationIndicator } from './components/LocationIndicator';
@@ -41,7 +41,7 @@ interface ToolbarButtonGroupProps extends ButtonGroupProps {
 }
 
 const ToolbarButtonGroup = (props: ToolbarButtonGroupProps) => <ButtonGroup
-  as={motion.div} variant="ghost" colorScheme="subtle" size="sm" {...props} />
+  as={motion.div} variant="ghost" colorScheme="subtle" size="sm" {...props} />;
 
 export interface AppToolbarProps extends React.HTMLAttributes<HTMLDivElement> {
   /**
@@ -128,8 +128,8 @@ const secondaryToolbarItems = (items) => {
     {items.filter(x => !!x).map((item) => <Tooltip closeOnMouseDown label={item.label} key={item.label}>
       <IconButton key={item.label} aria-label={item.label} isActive={item.isActive} onClick={item.onClick} icon={item.icon} />
     </Tooltip>)}
-  </ToolbarButtonGroup>
-}
+  </ToolbarButtonGroup>;
+};
 
 const secondaryToolbarOverflowMenu = (items) => {
   return <Menu>
@@ -149,8 +149,8 @@ const secondaryToolbarOverflowMenu = (items) => {
       </Portal>
     </>
     }
-  </Menu>
-}
+  </Menu>;
+};
 
 export const AppToolbar = (props: AppToolbarProps): React.ReactElement => {
   const {
@@ -190,37 +190,37 @@ export const AppToolbar = (props: AppToolbarProps): React.ReactElement => {
   } = React.useContext(LayoutContext);
   const toast = useToast();
   const commentsToggleToastRef = React.useRef(null);
-  const shouldShowUnderlay = isScrolledPastTitle["mainContent"] || (isScrolledPastTitle["rightSidebar"] && isRightSidebarOpen);
+  const shouldShowUnderlay = isScrolledPastTitle['mainContent'] || (isScrolledPastTitle['rightSidebar'] && isRightSidebarOpen);
 
   // If the workspace color mode doesn't match
   // the chakra color mode, update the chakra color mode
   React.useEffect(() => {
     if (isThemeDark && colorMode !== 'dark') {
-      toggleColorMode()
+      toggleColorMode();
     } else if (!isThemeDark && colorMode !== 'light') {
-      toggleColorMode()
+      toggleColorMode();
     }
   }, [isThemeDark, toggleColorMode]);
 
   const secondaryTools = [
     handleClickComments && {
-      label: isShowComments ? "Hide comments" : "Show comments",
+      label: isShowComments ? 'Hide comments' : 'Show comments',
       onClick: () => {
         if (isShowComments) {
           handleClickComments();
           reusableToast(toast, commentsToggleToastRef, {
-            title: "Comments hidden",
-            status: "info",
+            title: 'Comments hidden',
+            status: 'info',
             duration: 5000,
-            position: "top-right"
+            position: 'top-right'
           });
 
         } else {
           handleClickComments();
           reusableToast(toast, commentsToggleToastRef, {
-            title: "Comments shown",
+            title: 'Comments shown',
             duration: 5000,
-            position: "top-right"
+            position: 'top-right'
           });
 
         }
@@ -228,7 +228,7 @@ export const AppToolbar = (props: AppToolbarProps): React.ReactElement => {
       icon: isShowComments ? <ChatBubbleFillIcon /> : <ChatBubbleIcon />
     },
     {
-      label: "Help",
+      label: 'Help',
       onClick: handlePressHelp,
       icon: <HelpIcon />
     },
@@ -245,7 +245,7 @@ export const AppToolbar = (props: AppToolbarProps): React.ReactElement => {
       <Flex
         as={motion.div}
         key="leftSidebar tools"
-        {...layoutAnimationProps(isLeftSidebarOpen ? mainSidebarWidth + "px" : "auto")}
+        {...layoutAnimationProps(isLeftSidebarOpen ? mainSidebarWidth + 'px' : 'auto')}
         justifyContent="space-between"
         flexShrink={0}
       >
@@ -258,7 +258,7 @@ export const AppToolbar = (props: AppToolbarProps): React.ReactElement => {
           alignItems="center"
           justifyContent="flex-start"
         >
-          {isElectron && os === "mac" && (
+          {isElectron && os === 'mac' && (
             <FakeTrafficLights opacity={isWinFocused ? 1 : 0} />
           )}
 
@@ -326,11 +326,11 @@ export const AppToolbar = (props: AppToolbarProps): React.ReactElement => {
       justifyContent="flex-start"
     >
       <LocationIndicator
-        isVisible={isScrolledPastTitle["mainContent"]}
+        isVisible={isScrolledPastTitle['mainContent']}
         currentLocationName={currentLocationName}
       />
     </ToolbarButtonGroup>
-  )
+  );
 
   const contentControls = (
     <ToolbarButtonGroup
@@ -341,7 +341,7 @@ export const AppToolbar = (props: AppToolbarProps): React.ReactElement => {
       display="flex"
       justifyContent="center"
     />
-  )
+  );
 
   const variants = {
     visible: {
@@ -352,7 +352,7 @@ export const AppToolbar = (props: AppToolbarProps): React.ReactElement => {
       left: mainSidebarWidth,
       transition: layoutAnimationTransition
     },
-  }
+  };
 
   return (
     <Flex
@@ -367,9 +367,9 @@ export const AppToolbar = (props: AppToolbarProps): React.ReactElement => {
       bottom="auto"
       className="toolbar"
       sx={{
-        WebkitAppRegion: "drag",
-        "button, a": {
-          WebkitAppRegion: "no-drag"
+        WebkitAppRegion: 'drag',
+        'button, a': {
+          WebkitAppRegion: 'no-drag'
         }
       }}
     >
@@ -384,15 +384,15 @@ export const AppToolbar = (props: AppToolbarProps): React.ReactElement => {
             as={motion.div}
             key="header-backdrop"
             className="header-content-backdrop"
-            backdropFilter={`blur(10px)`}
+            backdropFilter={'blur(10px)'}
             _after={{
               content: "''",
-              position: "absolute",
+              position: 'absolute',
               inset: 0,
-              bg: "background.floor",
-              transitionProperty: "background",
-              transitionTimingFunction: "ease-in-out",
-              transitionDuration: "fast",
+              bg: 'background.floor',
+              transitionProperty: 'background',
+              transitionTimingFunction: 'ease-in-out',
+              transitionDuration: 'fast',
               opacity: 0.7,
             }}
             position="absolute"
@@ -404,8 +404,8 @@ export const AppToolbar = (props: AppToolbarProps): React.ReactElement => {
             initial={{ opacity: 0, left: isLeftSidebarOpen ? mainSidebarWidth : 0 }}
             variants={variants}
             animate={[
-              isLeftSidebarOpen && "isLeftSidebarOpen",
-              shouldShowUnderlay && "visible"
+              isLeftSidebarOpen && 'isLeftSidebarOpen',
+              shouldShowUnderlay && 'visible'
             ].filter(Boolean)}
             exit={{ opacity: 0 }}
           />

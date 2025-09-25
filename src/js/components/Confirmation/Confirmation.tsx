@@ -1,5 +1,5 @@
 import React from 'react';
-import { Portal, useDisclosure, AlertDialog, AlertDialogOverlay, AlertDialogContent, AlertDialogHeader, AlertDialogFooter, AlertDialogBody, Button, ButtonGroup } from "@chakra-ui/react"
+import { Portal, useDisclosure, AlertDialog, AlertDialogOverlay, AlertDialogContent, AlertDialogHeader, AlertDialogFooter, AlertDialogBody, Button, ButtonGroup } from '@chakra-ui/react';
 
 export const Confirmation = ({
   isOpen,
@@ -16,7 +16,7 @@ export const Confirmation = ({
     onClose: onConfirmClose } = useDisclosure({
       defaultIsOpen: isOpen,
       onClose: onClose
-    })
+    });
 
   return (<AlertDialog
     isOpen={isOpen}
@@ -45,7 +45,7 @@ export const Confirmation = ({
                 colorScheme="highlight"
                 onClick={() => {
                   onConfirm();
-                  onClose()
+                  onClose();
                 }}>
                 {confirmText || 'Confirm'}
               </Button>
@@ -55,4 +55,4 @@ export const Confirmation = ({
       </AlertDialogOverlay>
     </Portal>
   </AlertDialog>);
-}
+};

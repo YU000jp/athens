@@ -1,6 +1,6 @@
-import React from "react";
+import React from 'react';
 
-import { useDroppable } from "@dnd-kit/core";
+import { useDroppable } from '@dnd-kit/core';
 
 export function Droppable(props) {
   const { id, children } = props;

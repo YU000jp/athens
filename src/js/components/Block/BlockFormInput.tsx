@@ -11,15 +11,15 @@ export const BlockFormInput = ({ children, isMultiline, ...inputProps }) => {
       py={1}
       {...inputProps}
       _focusWithin={{
-        shadow: "focus"
+        shadow: 'focus'
       }}
       sx={{
-        ".block-content": {
-          gridArea: "unset",
-          minHeight: "unset"
+        '.block-content': {
+          gridArea: 'unset',
+          minHeight: 'unset'
         },
-        ".chakra-avatar__group": {
-          position: "absolute",
+        '.chakra-avatar__group': {
+          position: 'absolute',
           right: 0.5,
           top: 0.5
         }
@@ -28,4 +28,4 @@ export const BlockFormInput = ({ children, isMultiline, ...inputProps }) => {
       {children}
     </Component>
   );
-}
+};

@@ -1,7 +1,7 @@
 import React from 'react';
-import { Button, Text, Box } from "@chakra-ui/react";
-import { CSS } from "@dnd-kit/utilities";
-import { useSortable } from "@dnd-kit/sortable";
+import { Button, Text, Box } from '@chakra-ui/react';
+import { CSS } from '@dnd-kit/utilities';
+import { useSortable } from '@dnd-kit/sortable';
 
 export const Item = (props) => {
   const { id, children, ...rest } = props;
@@ -36,7 +36,7 @@ export const Item = (props) => {
         as="span"
         textAlign="start"
         flex="1 1 100%"
-        fontWeight={isUnread ? "bold" : "n"}
+        fontWeight={isUnread ? 'bold' : 'n'}
         overflow="hidden"
         textOverflow="ellipsis">
         {name}

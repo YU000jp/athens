@@ -1,8 +1,8 @@
-import { Box, Flex } from "@chakra-ui/react";
-import { motion } from "framer-motion";
-import * as React from "react";
-import { AnimatePresence } from "framer-motion";
-import { LayoutContext, layoutAnimationProps } from "./useLayoutState";
+import { Box, Flex } from '@chakra-ui/react';
+import { motion } from 'framer-motion';
+import * as React from 'react';
+import { AnimatePresence } from 'framer-motion';
+import { LayoutContext, layoutAnimationProps } from './useLayoutState';
 
 /**
  * Main Sidebar
@@ -33,11 +33,11 @@ export const MainSidebar = (props) => {
           overscrollBehavior="contain"
           top={0}
           bottom={0}
-          {...layoutAnimationProps(mainSidebarWidth + "px")}
+          {...layoutAnimationProps(mainSidebarWidth + 'px')}
           {...(isMainSidebarFloating && {
-            position: "absolute",
+            position: 'absolute',
             inset: 0,
-            right: "auto"
+            right: 'auto'
           })}
         >
           <Flex
@@ -45,7 +45,7 @@ export const MainSidebar = (props) => {
             height="100%"
             overflowY="auto"
             overscrollBehavior="contain"
-            width={mainSidebarWidth + "px"}
+            width={mainSidebarWidth + 'px'}
             pt={4}
           >
             {children}

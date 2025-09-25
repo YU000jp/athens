@@ -1,7 +1,7 @@
 import React from 'react';
-import { BulletIcon, ArchiveIcon, ArrowLeftOnBoxIcon, CheckboxIcon, UnreadIcon } from "@/Icons/Icons";
-import { useTheme, Button, Flex, Box, ButtonGroup, HStack, MenuGroup, MenuItem, Text, VStack } from "@chakra-ui/react";
-import { ContextMenuContext } from "@/App/ContextMenuContext";
+import { BulletIcon, ArchiveIcon, ArrowLeftOnBoxIcon, CheckboxIcon, UnreadIcon } from '@/Icons/Icons';
+import { useTheme, Button, Flex, Box, ButtonGroup, HStack, MenuGroup, MenuItem, Text, VStack } from '@chakra-ui/react';
+import { ContextMenuContext } from '@/App/ContextMenuContext';
 
 export const NotificationItem = (props) => {
   const { notification, children, ...otherProps } = props;
@@ -15,13 +15,13 @@ export const NotificationItem = (props) => {
 
   const ContextMenuItems = () => {
     return <MenuGroup>
-      <MenuItem onClick={() => onOpenItem(object.parentUid, id)} icon={<ArrowLeftOnBoxIcon />}>Open {object.name ? "page" : "block"}</MenuItem>
+      <MenuItem onClick={() => onOpenItem(object.parentUid, id)} icon={<ArrowLeftOnBoxIcon />}>Open {object.name ? 'page' : 'block'}</MenuItem>
       {isRead
         ? <MenuItem onClick={() => onMarkAsUnread(id)} icon={<UnreadIcon />}>Mark as unread</MenuItem>
         : <MenuItem onClick={() => onMarkAsRead(id)} icon={<CheckboxIcon />}>Mark as read</MenuItem>}
       <MenuItem onClick={() => onArchive(id)} icon={<ArchiveIcon />}>Archive</MenuItem>
-    </MenuGroup>
-  }
+    </MenuGroup>;
+  };
 
   return (<VStack
     className="notification"
@@ -37,16 +37,16 @@ export const NotificationItem = (props) => {
     transitionDuration="fast"
     transitionTimingFunction="ease-in-out"
     border="1px solid"
-    borderColor={"separator.divider"}
-    boxShadow={isMenuOpen ? "focusInset" : "none"}
+    borderColor={'separator.divider'}
+    boxShadow={isMenuOpen ? 'focusInset' : 'none'}
     borderRadius="md"
-    bg={isRead ? "transparent" : "interaction.surface"}
-    color={isRead ? "foreground.secondary" : "foreground.primary"}
+    bg={isRead ? 'transparent' : 'interaction.surface'}
+    color={isRead ? 'foreground.secondary' : 'foreground.primary'}
     _hover={{
-      cursor: "pointer",
-      bg: "interaction.surface.hover"
+      cursor: 'pointer',
+      bg: 'interaction.surface.hover'
     }}
-    onClick={(e) => { if (e?.button === 0) onOpenItem(object.parentUid, id) }}
+    onClick={(e) => { if (e?.button === 0) onOpenItem(object.parentUid, id); }}
     onContextMenu={(e) => {
       addToContextMenu({ event: e, component: ContextMenuItems, ref });
     }}
@@ -85,7 +85,7 @@ export const NotificationItem = (props) => {
         transitionTimingFunction="ease-in-out"
         sx={{
           opacity: 0,
-          ".notification:hover &": {
+          '.notification:hover &': {
             opacity: 1
           }
         }}
@@ -98,6 +98,6 @@ export const NotificationItem = (props) => {
         <Button onClick={() => onArchive(id)} leftIcon={<ArchiveIcon />}>Archive</Button>
       </ButtonGroup>
     </HStack>
-  </VStack>)
-}
+  </VStack>);
+};
 

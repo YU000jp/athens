@@ -1,6 +1,6 @@
 import React from 'react';
-import { Box, Button, ButtonGroup, ButtonProps, Menu, MenuButton, MenuItem, MenuList } from "@chakra-ui/react";
-import { EllipsisHorizontalIcon } from "@/Icons/Icons";
+import { Box, Button, ButtonGroup, ButtonProps, Menu, MenuButton, MenuItem, MenuList } from '@chakra-ui/react';
+import { EllipsisHorizontalIcon } from '@/Icons/Icons';
 
 interface ActionObject extends ButtonProps {
   label: string;
@@ -19,9 +19,9 @@ export interface ActionsProps {
 export const Actions = ({ actions, setIsUsingActions }: ActionsProps): JSX.Element | null => {
   if (!actions) return null;
 
-  let componentActions = []; // Components as actions
-  let defaultActions = []; // Actions as object
-  let extraActions = []; // Actions as object, but with isExtra: true
+  const componentActions = []; // Components as actions
+  const defaultActions = []; // Actions as object
+  const extraActions = []; // Actions as object, but with isExtra: true
 
   actions.forEach(action => {
     if (React.isValidElement(action)) {
@@ -31,7 +31,7 @@ export const Actions = ({ actions, setIsUsingActions }: ActionsProps): JSX.Eleme
     } else {
       defaultActions.push(action);
     }
-  })
+  });
 
   return (
     <ButtonGroup
@@ -49,14 +49,14 @@ export const Actions = ({ actions, setIsUsingActions }: ActionsProps): JSX.Eleme
       _after={{
         content: "''",
         zIndex: -1,
-        position: "absolute",
+        position: 'absolute',
         top: 0,
         left: 0,
-        width: "100%",
-        height: "100%",
-        borderRadius: "inherit",
-        bg: "background.vibrancy",
-        backdropFilter: "blur(12px)"
+        width: '100%',
+        height: '100%',
+        borderRadius: 'inherit',
+        bg: 'background.vibrancy',
+        backdropFilter: 'blur(12px)'
       }}
     >
       {componentActions}

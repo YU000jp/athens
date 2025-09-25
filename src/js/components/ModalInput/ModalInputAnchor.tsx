@@ -1,5 +1,5 @@
-import { PopoverAnchor } from "@chakra-ui/react";
-import React from "react";
+import { PopoverAnchor } from '@chakra-ui/react';
+import React from 'react';
 
 /**
  * ModalInputAnchor

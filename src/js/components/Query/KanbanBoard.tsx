@@ -15,14 +15,14 @@ export const KanbanCard = forwardRef(({ children, isOver }, ref) => {
   const Menu = React.memo(() => {
     return <MenuGroup title="Card">
       <MenuItem icon={<PlusIcon />}>Open in right sidebar</MenuItem>
-    </MenuGroup>
-  })
+    </MenuGroup>;
+  });
 
   return <Box
     ref={boxRef}
     as={motion.div}
     animate={{
-      height: "auto",
+      height: 'auto',
       opacity: 1,
     }}
     exit={{
@@ -34,7 +34,7 @@ export const KanbanCard = forwardRef(({ children, isOver }, ref) => {
       opacity: 0,
     }}
     minHeight="3rem"
-    listStyleType={"none"}
+    listStyleType={'none'}
     bg="interaction.surface"
     position="relative"
     py={2}
@@ -52,24 +52,24 @@ export const KanbanCard = forwardRef(({ children, isOver }, ref) => {
         event: e,
         component: Menu,
         isExclusive: true,
-        key: "card"
-      })
+        key: 'card'
+      });
     }}
     {...(isOver && {
       _after: {
         content: '""',
-        position: "absolute",
+        position: 'absolute',
         inset: 0,
-        top: "auto",
-        height: "2px",
-        bg: "link",
+        top: 'auto',
+        height: '2px',
+        bg: 'link',
         _hover: {}
       }
     }
     )}
   >
     {children}
-  </Box>
+  </Box>;
 });
 
 export const KanbanColumn = forwardRef((props, ref) => {
@@ -87,16 +87,16 @@ export const KanbanColumn = forwardRef((props, ref) => {
       overflowY="auto"
       _after={{
         content: "''",
-        position: "absolute",
-        pointerEvents: "none",
+        position: 'absolute',
+        pointerEvents: 'none',
         inset: 0,
-        borderRadius: "inherit",
-        border: "1px solid",
-        borderColor: "separator.divider",
+        borderRadius: 'inherit',
+        border: '1px solid',
+        borderColor: 'separator.divider',
 
         ...(isOver && {
-          border: "none",
-          bg: "link",
+          border: 'none',
+          bg: 'link',
           opacity: 0.1,
         })
       }}
@@ -141,7 +141,7 @@ const scrollShadow = (top, right, bottom, left, color, depth, blur, inset) => {
     -1 * depth
   )}px ${blur}px -${blur + inset}px ${color}`;
 
-  return [shadowLeft, shadowRight, shadowTop, shadowBottom].join(", ");
+  return [shadowLeft, shadowRight, shadowTop, shadowBottom].join(', ');
 };
 
 export const KanbanSwimlane = forwardRef((props, ref) => {
@@ -152,7 +152,7 @@ export const KanbanSwimlane = forwardRef((props, ref) => {
   const shadowDepth = 12;
   const shadowBlur = shadowDepth;
   const shadowInset = shadowDepth / 2;
-  const shadowColor = "#000";
+  const shadowColor = '#000';
 
   const shadow = React.useMemo(() => scrollShadow(
     overflowBox.top,
@@ -179,14 +179,14 @@ export const KanbanSwimlane = forwardRef((props, ref) => {
       position="relative"
       _after={{
         content: "''",
-        position: "absolute",
-        pointerEvents: "none",
+        position: 'absolute',
+        pointerEvents: 'none',
         inset: 0,
-        borderRadius: "inherit",
+        borderRadius: 'inherit',
         boxShadow: shadow
       }}
       sx={{
-        "WebkitOverflowScrolling": "touch",
+        'WebkitOverflowScrolling': 'touch',
       }}
       {...laneProps}
     >
@@ -228,4 +228,4 @@ export const KanbanBoard = forwardRef((props, ref) => {
       {children}
     </VStack>
   );
-})
+});

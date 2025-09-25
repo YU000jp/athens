@@ -8,7 +8,7 @@ const DISPLAY_TITLES = {
   'links-count': 'Links',
   'modified': 'Modified',
   'created': 'Created',
-}
+};
 
 
 // react-window adds style props to the children, but
@@ -25,11 +25,11 @@ const filterStyle = (style) => Object.keys(style).reduce((acc, key) => {
 
 const renderDate = (date) => {
   if (typeof date === 'string') {
-    return date
+    return date;
   } else {
-    return "—"
+    return '—';
   }
-}
+};
 
 const RowTd = ({ children, ...props }) => {
   return (
@@ -40,8 +40,8 @@ const RowTd = ({ children, ...props }) => {
     >
       {children}
     </Td>
-  )
-}
+  );
+};
 
 const Row = ({ index, data, style }) => {
 
@@ -73,14 +73,14 @@ const Row = ({ index, data, style }) => {
           textAlign="left"
           padding="0"
         >
-          {DISPLAY_TITLES[item[":node/title"]] || item[":node/title"]}
+          {DISPLAY_TITLES[item[':node/title']] || item[':node/title']}
         </Button>
       </RowTd>
-      <RowTd>{item[":block/_refs"]?.length || 0}</RowTd>
-      <RowTd>{renderDate(item[":time/modified"])}</RowTd>
-      <RowTd>{renderDate(item[":time/created"])}</RowTd>
+      <RowTd>{item[':block/_refs']?.length || 0}</RowTd>
+      <RowTd>{renderDate(item[':time/modified'])}</RowTd>
+      <RowTd>{renderDate(item[':time/created'])}</RowTd>
     </Tr>
-  )
+  );
 };
 
 const getHeight = (el) => {
@@ -89,7 +89,7 @@ const getHeight = (el) => {
   } else {
     return 500;
   }
-}
+};
 
 export const AllPagesTable = ({ sortedPages, onClickItem, sortedBy, sortDirection, onClickSort, dateFormatFn }) => {
   const containerRef = React.useRef();
@@ -98,21 +98,21 @@ export const AllPagesTable = ({ sortedPages, onClickItem, sortedBy, sortDirectio
   const rows = React.useMemo(() => sortedPages.map((row) => {
     return {
       ...row,
-      onClick: (e) => onClickItem(e, row[":node/title"]),
-      ":time/modified": dateFormatFn(row[":time/modified"]),
-      ":time/created": dateFormatFn(row[":time/created"]),
-    }
+      onClick: (e) => onClickItem(e, row[':node/title']),
+      ':time/modified': dateFormatFn(row[':time/modified']),
+      ':time/created': dateFormatFn(row[':time/created']),
+    };
   }), [sortedPages]);
 
   // Watch the window for resizing
   React.useLayoutEffect(() => {
     const updateSize = () => {
-      setContainerHeight(getHeight(containerRef.current))
+      setContainerHeight(getHeight(containerRef.current));
     };
-    window.addEventListener("resize", updateSize);
+    window.addEventListener('resize', updateSize);
     updateSize();
-    return () => window.removeEventListener("resize", updateSize);
-  })
+    return () => window.removeEventListener('resize', updateSize);
+  });
 
   return <Box
     flex="1 1 100%"
@@ -120,32 +120,32 @@ export const AllPagesTable = ({ sortedPages, onClickItem, sortedBy, sortDirectio
     height="var(--app-height)"
     px={4}
     sx={{
-      "--margin-top": "2rem",
-      "--thead-height": "8rem",
-      "--child-width": "75rem",
-      "--max-child-width": "max(100vw - 4rem)",
+      '--margin-top': '2rem',
+      '--thead-height': '8rem',
+      '--child-width': '75rem',
+      '--max-child-width': 'max(100vw - 4rem)',
     }}
   >
     <Table variant="striped"
       height="var(--app-height)"
       sx={{
-        "tr > *:nth-of-type(1)": {
-          flex: "0 0 calc(100% - 39rem)"
+        'tr > *:nth-of-type(1)': {
+          flex: '0 0 calc(100% - 39rem)'
         },
-        "tr > *:nth-of-type(2)": {
-          flex: "0 0 7rem",
-          color: "foreground.secondary",
-          fontSize: "sm"
+        'tr > *:nth-of-type(2)': {
+          flex: '0 0 7rem',
+          color: 'foreground.secondary',
+          fontSize: 'sm'
         },
-        "tr > *:nth-of-type(3)": {
-          flex: "0 0 16rem",
-          color: "foreground.secondary",
-          fontSize: "sm"
+        'tr > *:nth-of-type(3)': {
+          flex: '0 0 16rem',
+          color: 'foreground.secondary',
+          fontSize: 'sm'
         },
-        "tr > *:nth-of-type(4)": {
-          flex: "0 0 16rem",
-          color: "foreground.secondary",
-          fontSize: "sm"
+        'tr > *:nth-of-type(4)': {
+          flex: '0 0 16rem',
+          color: 'foreground.secondary',
+          fontSize: 'sm'
         },
       }}
     >
@@ -179,7 +179,7 @@ export const AllPagesTable = ({ sortedPages, onClickItem, sortedBy, sortDirectio
               >
                 {DISPLAY_TITLES[column] || column}
               </Button>
-            </Th>
+            </Th>;
           })}
         </Tr>
       </Thead>
@@ -191,9 +191,9 @@ export const AllPagesTable = ({ sortedPages, onClickItem, sortedBy, sortDirectio
         ref={containerRef}
         sx={{
           // target the container that renders the row items
-          "> div > div": {
-            display: "flex",
-            justifyContent: "center",
+          '> div > div': {
+            display: 'flex',
+            justifyContent: 'center',
           }
         }}
       >
@@ -203,17 +203,17 @@ export const AllPagesTable = ({ sortedPages, onClickItem, sortedBy, sortDirectio
           itemSize={52}
           itemData={rows}
           style={{
-            position: "absolute",
+            position: 'absolute',
             top: 0,
-            left: "auto",
-            right: "auto",
-            width: "100%",
-            paddingBottom: "2rem",
+            left: 'auto',
+            right: 'auto',
+            width: '100%',
+            paddingBottom: '2rem',
           }}
         >
           {Row}
         </FixedSizeList>
       </Tbody>
     </Table>
-  </Box >
-}
+  </Box >;
+};

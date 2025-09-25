@@ -1,5 +1,5 @@
-import { PopoverContent, Portal, usePopoverContext } from "@chakra-ui/react";
-import { RemoveScroll } from "react-remove-scroll";
+import { PopoverContent, Portal, usePopoverContext } from '@chakra-ui/react';
+import { RemoveScroll } from 'react-remove-scroll';
 
 /**
  * ModalInputPopover
@@ -20,7 +20,7 @@ export const ModalInputPopover = (props) => {
           flexBasis="fit-content"
           width="unset"
           _focus={{
-            outline: "none"
+            outline: 'none'
           }}
           {...popoverContentProps}
         >

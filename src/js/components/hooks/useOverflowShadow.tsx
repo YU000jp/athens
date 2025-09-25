@@ -1,4 +1,4 @@
-import * as React from "react";
+import * as React from 'react';
 
 const normalizeValue = (value) => Math.max(0, value);
 

@@ -1,4 +1,4 @@
-import React from 'react'
+import React from 'react';
 import { Button } from '@chakra-ui/react';
 
 interface PropertyNameProps extends React.HTMLAttributes<HTMLButtonElement> {
@@ -31,22 +31,22 @@ export const PropertyName = (props: PropertyNameProps) => {
       size="sm"
       p={0}
       sx={{
-        "svg": {
-          pointerEvents: "none",
-          transform: "scale(1.1001)", // Prevents the bullet being squished
-          overflow: "visible", // Prevents the bullet being cropped
-          width: "1em",
-          height: "1em",
-          "*": {
-            vectorEffect: "non-scaling-stroke"
+        'svg': {
+          pointerEvents: 'none',
+          transform: 'scale(1.1001)', // Prevents the bullet being squished
+          overflow: 'visible', // Prevents the bullet being cropped
+          width: '1em',
+          height: '1em',
+          '*': {
+            vectorEffect: 'non-scaling-stroke'
           }
         },
-        "circle": {
+        'circle': {
           transformOrigin: 'center',
           transition: 'all 0.15s ease-in-out',
-          stroke: "transparent",
-          strokeWidth: "0.125em",
-          fill: "currentColor",
+          stroke: 'transparent',
+          strokeWidth: '0.125em',
+          fill: 'currentColor',
         }
 
       }}
@@ -61,5 +61,5 @@ export const PropertyName = (props: PropertyNameProps) => {
       </svg>
       {name}
     </Button>
-  )
+  );
 };

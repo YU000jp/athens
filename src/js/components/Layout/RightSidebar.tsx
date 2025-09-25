@@ -1,7 +1,7 @@
-import * as React from "react";
-import { LayoutContext, layoutAnimationProps, layoutAnimationTransition } from "./useLayoutState";
+import * as React from 'react';
+import { LayoutContext, layoutAnimationProps, layoutAnimationTransition } from './useLayoutState';
 import { AnimatePresence, motion } from 'framer-motion';
-import { RightSidebarResizeControl } from "./RightSidebarResizeControl";
+import { RightSidebarResizeControl } from './RightSidebarResizeControl';
 import { XmarkIcon, ChevronDownVariableIcon, ArrowLeftOnBoxIcon } from '@/Icons/Icons';
 import { Flex, ButtonGroup, Button, Text, IconButton, Box, Collapse, VStack, BoxProps, Tooltip } from '@chakra-ui/react';
 import { useInView } from 'react-intersection-observer';
@@ -29,27 +29,27 @@ export const RightSidebar = (props: RightSidebarProps) => {
 
   React.useEffect(() => {
     if (inView) {
-      if (isScrolledPastTitle["rightSidebar"]) {
-        setIsScrolledPastTitle(prev => ({ ...prev, "rightSidebar": false }));
+      if (isScrolledPastTitle['rightSidebar']) {
+        setIsScrolledPastTitle(prev => ({ ...prev, 'rightSidebar': false }));
       }
     } else {
-      if (!isScrolledPastTitle["rightSidebar"]) {
-        setIsScrolledPastTitle(prev => ({ ...prev, "rightSidebar": true }));
+      if (!isScrolledPastTitle['rightSidebar']) {
+        setIsScrolledPastTitle(prev => ({ ...prev, 'rightSidebar': true }));
       }
     }
   }, [inView, setIsScrolledPastTitle]);
 
   const layoutAnimation = {
-    ...layoutAnimationProps(unsavedRightSidebarWidth + "vw"),
+    ...layoutAnimationProps(unsavedRightSidebarWidth + 'vw'),
     animate: {
-      width: unsavedRightSidebarWidth + "vw",
+      width: unsavedRightSidebarWidth + 'vw',
       opacity: 1,
       transition: isResizingLayout ? {
         ...layoutAnimationTransition,
         mass: 0,
       } : layoutAnimationTransition
     },
-  }
+  };
 
   return (
     <AnimatePresence initial={false}>
@@ -75,7 +75,7 @@ export const RightSidebar = (props: RightSidebarProps) => {
           />
           <Box
             pt={`calc(${toolbarHeight} + 0.5rem)`}
-            width={unsavedRightSidebarWidth + "vw"}
+            width={unsavedRightSidebarWidth + 'vw'}
             overflowX="hidden"
             overflowY="auto"
             height="100%"
@@ -98,7 +98,7 @@ export const RightSidebar = (props: RightSidebarProps) => {
 };
 
 export const SidebarItem = ({ title, type, isOpen, onToggle, onRemove, onNavigate, children }) => {
-  const className = { "page": "node-page", "block": "block-page", "graph": "graph-page" }[type];
+  const className = { 'page': 'node-page', 'block': 'block-page', 'graph': 'graph-page' }[type];
   return (
     <VStack
       bg="background.upper"
@@ -109,9 +109,9 @@ export const SidebarItem = ({ title, type, isOpen, onToggle, onRemove, onNavigat
       spacing={0}
       mx={4}
       sx={{
-        "--page-padding": "0rem",
-        "--page-left-gutter-width": "1em",
-        "--page-right-gutter-width": "3em",
+        '--page-padding': '0rem',
+        '--page-left-gutter-width': '1em',
+        '--page-right-gutter-width': '3em',
       }}
       mt={2}
     >
@@ -139,7 +139,7 @@ export const SidebarItem = ({ title, type, isOpen, onToggle, onRemove, onNavigat
           leftIcon={<ChevronDownVariableIcon
             boxSize={4}
             mr={-2}
-            transform={isOpen ? undefined : "rotate(-90deg)"}
+            transform={isOpen ? undefined : 'rotate(-90deg)'}
             transitionProperty="common"
             transitionDuration="0.15s"
             transitionTimingFunction="ease-in-out"
@@ -189,11 +189,11 @@ export const SidebarItem = ({ title, type, isOpen, onToggle, onRemove, onNavigat
           // HACK: Gentle hack to create padding
           // within the collapse container, only
           // when open
-          "> *:last-child": {
+          '> *:last-child': {
             mb: 2,
           }
         }}
-        onPointerDown={(e) => { e.stopPropagation() }}
+        onPointerDown={(e) => { e.stopPropagation(); }}
       >
         {children}
       </Box>

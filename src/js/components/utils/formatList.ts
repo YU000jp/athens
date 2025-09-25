@@ -14,6 +14,6 @@ export const formatList = (items: string[]): string | false => {
   } else {
     const lastName = items[items.length - 1];
     const restitems = items.slice(0, items.length - 1);
-    return restitems.join(", ") + ", and " + lastName;
+    return restitems.join(', ') + ', and ' + lastName;
   }
 };

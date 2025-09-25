@@ -1,4 +1,4 @@
-import React from 'react'
+import React from 'react';
 import { IconButton, useTheme } from '@chakra-ui/react';
 
 interface ToggleProps extends React.HTMLAttributes<HTMLButtonElement> {
@@ -20,31 +20,31 @@ export const Toggle = (props: ToggleProps) => {
       colorScheme="subtle"
       size="sm"
       sx={{
-        gridArea: "toggle",
+        gridArea: 'toggle',
         flexShrink: 0,
         position: 'relative',
-        appearance: "none",
-        placeItems: "center",
-        placeContent: "center",
-        display: "flex",
-        alignItems: "flex-start",
-        alignSelf: "flex-start",
-        minHeight: "inherit",
+        appearance: 'none',
+        placeItems: 'center',
+        placeContent: 'center',
+        display: 'flex',
+        alignItems: 'flex-start',
+        alignSelf: 'flex-start',
+        minHeight: 'inherit',
         zIndex: 2,
-        minWidth: "0",
-        h: "var(--control-height)",
-        w: "auto",
-        fontSize: "inherit",
+        minWidth: '0',
+        h: 'var(--control-height)',
+        w: 'auto',
+        fontSize: 'inherit',
         p: 0,
-        "svg": {
-          pointerEvents: "none",
-          overflow: "visible",
-          width: "1em",
-          height: "1em",
+        'svg': {
+          pointerEvents: 'none',
+          overflow: 'visible',
+          width: '1em',
+          height: '1em',
           transform: `rotate(${isOpen ? 90 : 0}deg)`,
 
-          "*": {
-            vectorEffect: "non-scaling-stroke"
+          '*': {
+            vectorEffect: 'non-scaling-stroke'
           }
         },
       }}
@@ -61,5 +61,5 @@ export const Toggle = (props: ToggleProps) => {
         />
       </svg>
     </IconButton>
-  )
+  );
 };

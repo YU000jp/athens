@@ -1,5 +1,5 @@
-import { PopoverTrigger } from "@chakra-ui/react";
-import React from "react";
+import { PopoverTrigger } from '@chakra-ui/react';
+import React from 'react';
 
 /**
  * ModalInputTrigger

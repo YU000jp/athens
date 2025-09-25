@@ -11,7 +11,7 @@ const mockData = {
   hostAddress: '192.169.0.1',
   currentPageMembers: presenceData.currentPageMembers,
   differentPageMembers: presenceData.differentPageMembers,
-}
+};
 
 export const useAppState = () => {
 
@@ -79,5 +79,5 @@ export const useAppState = () => {
     setIsMergeDialogOpen,
     isWorkspaceDialogOpen,
     setIsWorkspaceDialogOpen,
-  }
-}
+  };
+};

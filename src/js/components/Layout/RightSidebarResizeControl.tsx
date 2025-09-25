@@ -12,7 +12,7 @@ const getVW = (e, window) => {
   const clientX = e.clientX;
   const calcVW = (innerWidth - clientX) / innerWidth * 100;
   return calcVW;
-}
+};
 
 interface RightSidebarResizeControlProps extends BoxProps {
   onResizeSidebar: (size: number) => void;
@@ -42,17 +42,17 @@ export const RightSidebarResizeControl = (props: RightSidebarResizeControlProps)
       updateWidthTimer.current = window.setTimeout(() => {
         onResizeSidebar(unsavedRightSidebarWidth);
         setIsResizingLayout(false);
-      }, 1000)
+      }, 1000);
     }
-  }
+  };
 
   const moveHandler = (e) => {
-    updateWidth(e)
-  }
+    updateWidth(e);
+  };
 
   const mouseUpHandler = () => {
     setIsDragging(false);
-  }
+  };
 
   React.useEffect(() => {
     window.addEventListener('mousemove', moveHandler);
@@ -60,7 +60,7 @@ export const RightSidebarResizeControl = (props: RightSidebarResizeControlProps)
     return () => {
       window.removeEventListener('mousemove', moveHandler);
       window.removeEventListener('mouseup', mouseUpHandler);
-    }
+    };
   });
 
   return (
@@ -85,4 +85,4 @@ export const RightSidebarResizeControl = (props: RightSidebarResizeControlProps)
     >
     </Box>
   );
-}
+};

@@ -1,5 +1,5 @@
-import { Box, Menu, MenuButton, MenuList, Portal, useOutsideClick } from "@chakra-ui/react";
-import * as React from "react";
+import { Box, Menu, MenuButton, MenuList, Portal, useOutsideClick } from '@chakra-ui/react';
+import * as React from 'react';
 
 export const ContextMenuContext = React.createContext(null);
 
@@ -10,7 +10,7 @@ const NULL_STATE = {
   sources: [],
   onCloseFn: null,
   isExclusive: false,
-}
+};
 
 interface addToContextMenuProps {
   event: React.MouseEvent<HTMLDivElement, MouseEvent>,
@@ -27,13 +27,13 @@ const useContextMenuState = () => {
 
   // Reset the context menu state
   const onCloseMenu = () => {
-    if (typeof menuState?.onCloseFn === "function") menuState.onCloseFn();
+    if (typeof menuState?.onCloseFn === 'function') menuState.onCloseFn();
     setMenuState(NULL_STATE);
   };
 
   let components = [];
   let sources = [];
-  let keys = [];
+  const keys = [];
 
   /**
    * Reveal a menu only for the clicked element.
@@ -51,11 +51,11 @@ const useContextMenuState = () => {
     }
 
     if (!component) {
-      console.warn("No component provided to addToContextMenu");
+      console.warn('No component provided to addToContextMenu');
       return;
     }
     if (!event) {
-      console.warn("No event provided to addToContextMenu");
+      console.warn('No event provided to addToContextMenu');
       return;
     }
 
@@ -74,14 +74,14 @@ const useContextMenuState = () => {
       const { left, top, width, height } = anchorEl.current.getBoundingClientRect();
       position = {
         left, top, width, height
-      }
+      };
     } else {
       position = {
         left: event.clientX,
         top: event.clientY,
         width: 0,
         height: 0
-      }
+      };
     }
     // Exclusive menus set state immediately and then
     // stop the event from creating more menus
@@ -130,7 +130,7 @@ const useContextMenuState = () => {
     isContextMenuOpen: menuState.isOpen,
     contextMenuComponents: menuState.components,
   };
-}
+};
 
 const MenuSource = ({ position }) => {
   return <Box
@@ -142,7 +142,7 @@ const MenuSource = ({ position }) => {
     width={position.width + 'px'}
     height={position.height + 'px'}
   />;
-}
+};
 
 export const ContextMenuProvider = ({ children }) => {
   const contextMenuState = useContextMenuState();
@@ -159,14 +159,14 @@ export const ContextMenuProvider = ({ children }) => {
   // Close when using mousewheel outside of the menu
   React.useEffect(() => {
     if (isContextMenuOpen) {
-      window.addEventListener("wheel", onCloseMenu);
-      window.addEventListener("dblclick", onCloseMenu);
+      window.addEventListener('wheel', onCloseMenu);
+      window.addEventListener('dblclick', onCloseMenu);
     }
     return () => {
-      window.removeEventListener("wheel", onCloseMenu);
-      window.removeEventListener("dblclick", onCloseMenu);
-    }
-  }, [isContextMenuOpen])
+      window.removeEventListener('wheel', onCloseMenu);
+      window.removeEventListener('dblclick', onCloseMenu);
+    };
+  }, [isContextMenuOpen]);
 
   return (
     <ContextMenuContext.Provider value={contextMenuState}>
@@ -180,8 +180,8 @@ export const ContextMenuProvider = ({ children }) => {
           <MenuSource position={contextMenuPosition} />
           <MenuList className="app-context-menu" ref={menuRef}>
             {contextMenuComponents.map((Child, index) => {
-              if (typeof Child === "function") {
-                return <Child key={index} />
+              if (typeof Child === 'function') {
+                return <Child key={index} />;
               } else {
                 return <React.Fragment key={index}>{Child}</React.Fragment>;
               }
@@ -191,4 +191,4 @@ export const ContextMenuProvider = ({ children }) => {
       </Menu>
     </ContextMenuContext.Provider>
   );
-}
+};
