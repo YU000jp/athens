@@ -1,14 +1,14 @@
 import React from 'react';
-import { Box, Text, HStack, Textarea, Button, MenuItem, MenuGroup } from '@chakra-ui/react'
+import { Box, Text, HStack, Textarea, Button, MenuItem, MenuGroup } from '@chakra-ui/react';
 import { ContextMenuContext } from '@/App/ContextMenuContext';
-import { withErrorBoundary } from "react-error-boundary";
+import { withErrorBoundary } from 'react-error-boundary';
 import { Anchor } from '@/Block/Anchor';
 
 interface InlineCommentInputProps {
   onSubmitComment: (comment: string) => void
 }
 
-const sanitizeCommentString = (comment: string) => comment.trim().replace(/\n/g, ' ')
+const sanitizeCommentString = (comment: string) => comment.trim().replace(/\n/g, ' ');
 
 export const InlineCommentInput = ({ onSubmitComment }: InlineCommentInputProps) => {
   const [commentString, setCommentString] = React.useState('');
@@ -20,7 +20,7 @@ export const InlineCommentInput = ({ onSubmitComment }: InlineCommentInputProps)
     setCommentString('');
     textareaRef.current.value = '';
     textareaRef.current.focus();
-  }
+  };
 
   return (<HStack align="stretch" _first={{ mt: 4 }}>
     <Textarea
@@ -33,7 +33,7 @@ export const InlineCommentInput = ({ onSubmitComment }: InlineCommentInputProps)
       onKeyDown={(e) => {
         // If pressing enter (but not also shift)
         if (e.key === 'Enter' && !e.shiftKey) {
-          handleSubmitComment(e)
+          handleSubmitComment(e);
         }
       }}
     />
@@ -42,8 +42,8 @@ export const InlineCommentInput = ({ onSubmitComment }: InlineCommentInputProps)
       onClick={(e) => handleSubmitComment(e)}
       isDisabled={!commentString}
     >Send</Button>
-  </HStack>)
-}
+  </HStack>);
+};
 
 export const CommentAnchor = ({ menu, ...boxProps }) => {
   const ref = React.useRef();
@@ -51,18 +51,18 @@ export const CommentAnchor = ({ menu, ...boxProps }) => {
   const isMenuOpen = getIsMenuOpen(ref);
 
   const MenuItems = () => {
-    return menu
-  }
+    return menu;
+  };
 
   return <Anchor
     isActive={isMenuOpen}
     ref={ref}
     onClick={(event) => {
-      addToContextMenu({ event, ref, component: MenuItems, anchorEl: ref, key: "comment" })
+      addToContextMenu({ event, ref, component: MenuItems, anchorEl: ref, key: 'comment' });
     }}
     {...boxProps}
-  />
-}
+  />;
+};
 
 const CommentErrorMessage = () => <Text color="foreground.secondary" display="block" p={2} borderRadius="sm">Couldn't show this comment</Text>;
 
@@ -72,12 +72,12 @@ export const CommentContainer = withErrorBoundary(({ children, menu, isFollowUp 
   const isMenuOpen = getIsMenuOpen(ref);
 
   const MenuItems = () => {
-    return menu
-  }
+    return menu;
+  };
 
   return <Box
     ref={ref}
-    bg={isMenuOpen ? "interaction.surface.hover" : "undefined"}
+    bg={isMenuOpen ? 'interaction.surface.hover' : 'undefined'}
     borderRadius="sm"
     transitionProperty="colors"
     transitionDuration="fastest"
@@ -96,20 +96,20 @@ export const CommentContainer = withErrorBoundary(({ children, menu, isFollowUp 
     'anchor comment refs'
     '_ reactions reactions'`}
     onContextMenu={(event) => {
-      addToContextMenu({ event, ref, component: MenuItems, key: "comment", isExclusive: true })
+      addToContextMenu({ event, ref, component: MenuItems, key: 'comment', isExclusive: true });
     }}
     _first={{
       borderTopWidth: 0
     }}
     sx={{
-      "> button.anchor:not([data-active])": {
-        color: "foreground.tertiary"
+      '> button.anchor:not([data-active])': {
+        color: 'foreground.tertiary'
       },
-      ":hover > button.anchor": {
-        color: "foreground.secondary"
+      ':hover > button.anchor': {
+        color: 'foreground.secondary'
       }
     }}
   >
     {children}
-  </Box>
+  </Box>;
 }, { fallback: <CommentErrorMessage /> });

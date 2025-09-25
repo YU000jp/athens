@@ -7,8 +7,8 @@ export const PageReference = ({ children }) => {
     <Box>
       {children}
     </Box>
-  )
-}
+  );
+};
 
 interface PageReferences {
   children: React.ReactNode,
@@ -30,8 +30,8 @@ export const ReferenceHeader = ({ onClick, title }) => {
     justifyContent="flex-start"
     color="foreground.secondary"
     display="flex"
-  >{title}</Button>
-}
+  >{title}</Button>;
+};
 
 export const ReferenceGroup = ({ title, onClickTitle, children }) => {
   return (
@@ -46,16 +46,16 @@ export const ReferenceGroup = ({ title, onClickTitle, children }) => {
       {title && <ReferenceHeader onClick={onClickTitle} title={title} />}
       {children}
     </VStack>
-  )
-}
+  );
+};
 
 export const ReferenceBlock = ({ children, actions }) => {
   if (actions) {
-    return (<HStack pr={2}><Box flex="1 1 100%">{children}</Box> {actions}</HStack>)
+    return (<HStack pr={2}><Box flex="1 1 100%">{children}</Box> {actions}</HStack>);
   } else {
-    return <Box>{children}</Box>
+    return <Box>{children}</Box>;
   }
-}
+};
 
 const EmptyReferencesNotice = ({ title }: { title: string }) => {
   return (<Text
@@ -64,8 +64,8 @@ const EmptyReferencesNotice = ({ title }: { title: string }) => {
     borderRadius="md"
     p={4}>
     No {title.toLowerCase()}
-  </Text>)
-}
+  </Text>);
+};
 
 export const PageReferences = withErrorBoundary(({ children, count, title, defaultIsOpen, onOpen, onClose, extras }: PageReferences) => {
 
@@ -97,7 +97,7 @@ export const PageReferences = withErrorBoundary(({ children, count, title, defau
           whiteSpace="nowrap"
           leftIcon={
             <ChevronRightIcon
-              transform={isOpen ? "rotate(90deg)" : null}
+              transform={isOpen ? 'rotate(90deg)' : null}
               transitionProperty="common"
               transitionDuration="0.15s"
               transitionTimingFunction="ease-in-out"
@@ -129,6 +129,6 @@ export const PageReferences = withErrorBoundary(({ children, count, title, defau
           {children}
         </VStack>
       </Collapse>
-    </VStack>)
+    </VStack>);
 },
-  { fallback: <Text>Error displaying references</Text> })
+  { fallback: <Text>Error displaying references</Text> });

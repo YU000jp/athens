@@ -22,4 +22,4 @@ export const reusableToast = (toast, ref, props) => {
       }
     });
   }
-}
+};

@@ -6,12 +6,12 @@ import {
   MenuItemProps,
   MenuGroupProps,
   TooltipProps,
-} from "@chakra-ui/react";
-import React from "react";
+} from '@chakra-ui/react';
+import React from 'react';
 
 
 type ActionsListMenuItem = MenuItemProps & {
-  type: "action";
+  type: 'action';
   title: React.ReactNode;
   tooltip?: React.ReactNode;
   tooltipProps?: TooltipProps;
@@ -19,7 +19,7 @@ type ActionsListMenuItem = MenuItemProps & {
 }
 
 type ActionsListDivider = {
-  type: "divider";
+  type: 'divider';
 }
 
 type ActionsListGroup = MenuGroupProps & {
@@ -42,16 +42,16 @@ interface mapActionsToMenuListProps {
  * @returns an array of items which can be rendered in a MenuList
  */
 export const mapActionsToMenuList = ({ target, menuItems }: mapActionsToMenuListProps): React.ReactChild[] => {
-  if (!target) console.error("mapActionsToMenuList: target is undefined");
+  if (!target) console.error('mapActionsToMenuList: target is undefined');
   if (!menuItems) return null;
 
   return menuItems.map((menuItem, index) => {
     const { type, ...itemProps } = menuItem;
 
-    if (type === "divider") {
-      return <MenuDivider key={"divider-" + index} />;
+    if (type === 'divider') {
+      return <MenuDivider key={'divider-' + index} />;
 
-    } else if (type === "group") {
+    } else if (type === 'group') {
       const { items, ...groupProps } = itemProps;
       return (
         <MenuGroup {...groupProps}>
@@ -59,7 +59,7 @@ export const mapActionsToMenuList = ({ target, menuItems }: mapActionsToMenuList
         </MenuGroup>
       );
 
-    } else if (type === "action") {
+    } else if (type === 'action') {
       const { title, tooltip, tooltipProps, ...menuItemProps } = itemProps;
       const niceProps = menuItemProps as MenuItemProps;
 
@@ -75,7 +75,7 @@ export const mapActionsToMenuList = ({ target, menuItems }: mapActionsToMenuList
           </Tooltip >
         );
       } else {
-        return <MenuItem {...niceProps}>{title}</MenuItem>
+        return <MenuItem {...niceProps}>{title}</MenuItem>;
       }
     } else {
       return null;

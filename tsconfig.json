@@ -4,7 +4,7 @@
 // path resolution settings.
 {
   "compilerOptions": {
-    "target": "es2015",
+    "target": "es2020",
     "module": "commonjs",
     "jsx": "react-jsx",
     "importHelpers": true,
@@ -12,6 +12,9 @@
     "esModuleInterop": true,
     "skipLibCheck": true,
     "noEmit": true,
+    "allowSyntheticDefaultImports": true,
+    "forceConsistentCasingInFileNames": true,
+    "moduleResolution": "node",
     "rootDir": "src/js/components/",
     "baseUrl": "src/js/components",
     "paths": {

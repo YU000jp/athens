@@ -1,6 +1,6 @@
 import {
   Button, ButtonGroup, Text, Box, Tooltip,
-} from "@chakra-ui/react";
+} from '@chakra-ui/react';
 import { formatList } from '@/utils/formatList';
 import { EmojiPickerPopover } from '@/EmojiPicker/EmojiPicker';
 
@@ -25,7 +25,7 @@ const ReactionItem = ({ reaction, onToggleReaction, currentUser }: ReactionItemP
   const users: UserId[] = reaction[1];
   const usersCount: number = reaction[1].length;
   const isFromCurrentUser: boolean = users.includes(currentUser);
-  const tooltipText: string = `${formatList(users) || "Someone"} reacted with ${reactionItem}`
+  const tooltipText: string = `${formatList(users) || 'Someone'} reacted with ${reactionItem}`;
 
   return <Tooltip label={tooltipText}>
     <Button
@@ -34,15 +34,15 @@ const ReactionItem = ({ reaction, onToggleReaction, currentUser }: ReactionItemP
       gap={1}
       px={1}
       position="relative"
-      variant={isFromCurrentUser ? "outline" : "ghost"}
+      variant={isFromCurrentUser ? 'outline' : 'ghost'}
       onClick={() => onToggleReaction(reactionItem, currentUser)}
     >
       <Box position="absolute" inset={0} />
       <Text transform="scale(1.125)" fontSize="md">{reactionItem}</Text>
-      <Text fontSize="xs" color="foreground.secondary">{usersCount < 10 ? usersCount : "9+"}</Text>
+      <Text fontSize="xs" color="foreground.secondary">{usersCount < 10 ? usersCount : '9+'}</Text>
     </Button>
-  </Tooltip>
-}
+  </Tooltip>;
+};
 
 export const Reactions = ({ reactions, onToggleReaction, currentUser }: ReactionsProps): JSX.Element | null => {
   if (!reactions.length) return null;

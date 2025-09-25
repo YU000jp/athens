@@ -1,15 +1,15 @@
-import { Popover, PopoverProps } from "@chakra-ui/react";
-import * as React from "react";
+import { Popover, PopoverProps } from '@chakra-ui/react';
+import * as React from 'react';
 
 
 /**
  * Popperjs modifier to set the width of the popper to the width of the reference element.
  */
 export const matchWidth = {
-  name: "matchWidth",
+  name: 'matchWidth',
   enabled: true,
-  phase: "beforeWrite",
-  requires: ["computeStyles"],
+  phase: 'beforeWrite',
+  requires: ['computeStyles'],
   fn: ({ state }) => {
     state.styles.popper.minWidth = `${state.rects.reference.width}px`;
   },
@@ -22,34 +22,34 @@ export const matchWidth = {
  * Popperjs modifier to override offset to place the popover overlapping the reference element
  */
 export const inset = {
-  name: "offset",
+  name: 'offset',
   options: {
     offset: ({ placement, reference }) => {
       switch (placement) {
-        case "top":
+        case 'top':
           return [0, -reference.height];
-        case "top-start":
+        case 'top-start':
           return [0, -reference.height];
-        case "top-end":
+        case 'top-end':
           return [0, -reference.height];
         default:
-        case "bottom":
+        case 'bottom':
           return [0, -reference.height];
-        case "bottom-start":
+        case 'bottom-start':
           return [0, -reference.height];
-        case "bottom-end":
+        case 'bottom-end':
           return [0, -reference.height];
-        case "left":
+        case 'left':
           return [0, -reference.width];
-        case "left-start":
+        case 'left-start':
           return [0, -reference.width];
-        case "left-end":
+        case 'left-end':
           return [0, -reference.width];
-        case "right":
+        case 'right':
           return [0, -reference.width];
-        case "right-start":
+        case 'right-start':
           return [0, -reference.width];
-        case "right-end":
+        case 'right-end':
           return [0, -reference.width];
       }
     }
@@ -60,11 +60,11 @@ export const inset = {
  * Popperjs modifier to set the default popper container to "flex" layout
  */
 export const containerIsFlex = {
-  name: "containerIsFlex",
+  name: 'containerIsFlex',
   enabled: true,
-  phase: "beforeWrite",
+  phase: 'beforeWrite',
   fn({ state }) {
-    state.styles.popper = { ...state.styles.popper, display: "flex" };
+    state.styles.popper = { ...state.styles.popper, display: 'flex' };
   }
 };
 
@@ -89,7 +89,7 @@ export const ModalInput = (props) => {
         matchWidth,
         containerIsFlex,
         {
-          name: "preventOverflow",
+          name: 'preventOverflow',
           options: {
             altAxis: true,
             padding: 8,

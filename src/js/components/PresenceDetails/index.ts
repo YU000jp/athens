@@ -1,2 +1,2 @@
-import { PresenceDetails } from "./PresenceDetails";
+import { PresenceDetails } from './PresenceDetails';
 export { PresenceDetails };

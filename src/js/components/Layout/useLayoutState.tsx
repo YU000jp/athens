@@ -1,8 +1,8 @@
-import * as React from "react";
+import * as React from 'react';
 
 export const LayoutContext = React.createContext(null);
 
-export const VIEW_MODES = ["regular", "compact"];
+export const VIEW_MODES = ['regular', 'compact'];
 
 /**
  * Transition properties for layout animation
@@ -10,7 +10,7 @@ export const VIEW_MODES = ["regular", "compact"];
 export const layoutAnimationTransition = {
   damping: 10,
   mass: 0.05,
-  type: "spring"
+  type: 'spring'
 };
 
 /**
@@ -38,7 +38,7 @@ export const useLayoutState = (props) => {
   const [unsavedRightSidebarWidth, setUnsavedRightSidebarWidth] = React.useState(rightSidebarWidth);
   const [isResizingLayout, setIsResizingLayout] = React.useState(false);
   const [isScrolledPastTitle, setIsScrolledPastTitle] = React.useState({});
-  const toolbarHeight = "3rem";
+  const toolbarHeight = '3rem';
 
   return {
     mainSidebarWidth,
@@ -62,4 +62,4 @@ export const LayoutProvider = (props) => {
   return <LayoutContext.Provider value={layoutState}>
     {children}
   </LayoutContext.Provider>;
-}
+};

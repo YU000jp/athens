@@ -1,5 +1,5 @@
-import * as React from "react";
-import { Portal } from "@chakra-ui/react";
+import * as React from 'react';
+import { Portal } from '@chakra-ui/react';
 import {
   DndContext,
   useSensors,
@@ -7,18 +7,18 @@ import {
   PointerSensor,
   DragOverlay,
   useSensor
-} from "@dnd-kit/core";
+} from '@dnd-kit/core';
 import {
   SortableContext,
   verticalListSortingStrategy,
   arrayMove
-} from "@dnd-kit/sortable";
-import { Item, ItemDragOverlay } from "./Item";
+} from '@dnd-kit/sortable';
+import { Item, ItemDragOverlay } from './Item';
 
 // configuration
 const activationConstraint = {
   distance: 15,
-}
+};
 
 export const List = (props) => {
   const {
@@ -27,15 +27,15 @@ export const List = (props) => {
     onUpdateItemsOrder,
     onOpenItem,
   } = props;
-  const ids = outerItems.map(x => x.key)
+  const ids = outerItems.map(x => x.key);
 
   // Maintain an internal list of items for proper animation
   const [items, setItems] = React.useState(outerItems);
   const [activeId, setActiveId] = React.useState(null);
 
   React.useEffect(() => {
-    setItems(outerItems)
-  }, [outerItems])
+    setItems(outerItems);
+  }, [outerItems]);
 
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint }),

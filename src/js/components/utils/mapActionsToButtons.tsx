@@ -4,8 +4,8 @@ import {
   MenuButton,
   Button,
   Portal
-} from "@chakra-ui/react";
-import { EllipsisHorizontalIcon } from "@/Icons/Icons";
+} from '@chakra-ui/react';
+import { EllipsisHorizontalIcon } from '@/Icons/Icons';
 import { mapActionsToMenuList } from './mapActionsToMenuList';
 
 const mapItemToButton = (action) => {
@@ -15,8 +15,8 @@ const mapItemToButton = (action) => {
     onClick={fn}
     leftIcon={leftIcon || icon}
     rightIcon={rightIcon}
-  >{action.label}</Button>
-}
+  >{action.label}</Button>;
+};
 
 export const mapActionsToButtons = (actions, limitShown: number) => {
   const showableActions = actions.slice(0, limitShown);

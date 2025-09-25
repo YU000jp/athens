@@ -1,8 +1,8 @@
-import React from "react";
+import React from 'react';
 
 import { withErrorBoundary } from 'react-error-boundary';
 import { VStack, Text, HStack, Tooltip, Avatar, AvatarGroup, Menu, MenuDivider, MenuButton, MenuList, MenuGroup, MenuItem, Button, Portal } from '@chakra-ui/react';
-import { ProfileSettingsDialog } from "@/ProfileSettingsDialog";
+import { ProfileSettingsDialog } from '@/ProfileSettingsDialog';
 
 type PersonWithPresence = Person & {
   pageTitle?: string,
@@ -40,7 +40,7 @@ const ConnectionButton = React.forwardRef((props: ConnectionButtonProps, ref) =>
         borderRadius="full"
         px={1}
         _hover={{
-          bg: "background.upper",
+          bg: 'background.upper',
         }}
       >
         {currentUser && (
@@ -62,7 +62,7 @@ const ConnectionButton = React.forwardRef((props: ConnectionButtonProps, ref) =>
         )}
       </Button>
     </Tooltip>
-  )
+  );
 });
 
 
@@ -82,7 +82,7 @@ export const PresenceDetails = withErrorBoundary((props: PresenceDetailsProps) =
   const showablePersons = otherPersons.length > 0 ? otherPersons : [currentUser];
   const [shouldShowProfileSettings, setShouldShowProfileSettings] = React.useState(false);
 
-  return connectionStatus === "local" ? (
+  return connectionStatus === 'local' ? (
     <></>
   ) : (
     <>
@@ -136,7 +136,7 @@ export const PresenceDetails = withErrorBoundary((props: PresenceDetailsProps) =
                         >
                           <Text maxWidth="10em">{member.username}</Text>
                         </MenuItem>
-                      )
+                      );
                     })}
                   </MenuGroup>
                 </>
@@ -178,7 +178,7 @@ export const PresenceDetails = withErrorBoundary((props: PresenceDetailsProps) =
         onClose={() => setShouldShowProfileSettings(false)}
         onUpdatePerson={(person) => {
           handleUpdateProfile(person);
-          setShouldShowProfileSettings(false)
+          setShouldShowProfileSettings(false);
         }}
       />
     </>

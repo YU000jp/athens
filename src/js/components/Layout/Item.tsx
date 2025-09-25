@@ -1,7 +1,7 @@
 import React from 'react';
-import { Button, Text, Box } from "@chakra-ui/react";
-import { CSS } from "@dnd-kit/utilities";
-import { useSortable } from "@dnd-kit/sortable";
+import { Button, Text, Box } from '@chakra-ui/react';
+import { CSS } from '@dnd-kit/utilities';
+import { useSortable } from '@dnd-kit/sortable';
 import { SidebarItem } from './RightSidebar';
 
 export const Item = (props) => {
@@ -13,7 +13,7 @@ export const Item = (props) => {
   React.useEffect(() => {
     if (ref.current) {
       const el = ref.current as HTMLElement;
-      setWidth(el.getBoundingClientRect().width + "px")
+      setWidth(el.getBoundingClientRect().width + 'px');
     }
   }, [ref]);
 

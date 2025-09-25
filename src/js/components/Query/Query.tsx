@@ -1,4 +1,4 @@
-import * as React from "react";
+import * as React from 'react';
 import {
   Button,
   ChakraProvider,
@@ -11,33 +11,33 @@ import {
   MenuOptionGroup,
   VStack,
   Text
-} from "@chakra-ui/react";
+} from '@chakra-ui/react';
 import { ChevronDownIcon, ViewIcon } from '@/Icons/Icons';
 
 export const Controls = (props) => {
-  const { isCheckedFn, properties, hiddenProperties, onChange, menuOptionGroupValue } = props
+  const { isCheckedFn, properties, hiddenProperties, onChange, menuOptionGroupValue } = props;
   return (
     <Menu closeOnSelect={false} size="sm">
       <Button as={MenuButton} size="sm" rightIcon={<ChevronDownIcon />}>Hidden Properties</Button>
       <MenuList>
         <MenuOptionGroup type="checkbox" onChange={(e) => console.log(e)} value={menuOptionGroupValue}>
           {properties.map((property) => {
-            const isActive = hiddenProperties[property]
+            const isActive = hiddenProperties[property];
             return <MenuItemOption
               icon={<ViewIcon />}
               value={property}
               onClick={(e) => onChange(e.target.innerHTML)}>{property}
-            </MenuItemOption>
+            </MenuItemOption>;
           })}
         </MenuOptionGroup>
       </MenuList>
     </Menu>
   );
-}
+};
 
 
 export const QueryRadioMenu = (props) => {
-  const { heading, options, onChange, value } = props
+  const { heading, options, onChange, value } = props;
   return (
     <Menu closeOnSelect={false} size="sm">
       <Button
@@ -49,8 +49,8 @@ export const QueryRadioMenu = (props) => {
         py={1}
         gap={2}
         sx={{
-          "> span, chakra-button__icon": {
-            display: "contents"
+          '> span, chakra-button__icon': {
+            display: 'contents'
           }
         }}
       >
@@ -75,12 +75,12 @@ export const QueryRadioMenu = (props) => {
       </MenuList>
     </Menu>
   );
-}
+};
 
 export const AuthorFilter = (props) => {
-  return 1
-}
+  return 1;
+};
 
 export const ThisPageFilter = (props) => {
-  return 1
-}
+  return 1;
+};

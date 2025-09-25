@@ -22,7 +22,7 @@ import {
   Button
 } from '@chakra-ui/react';
 
-import { HexColorPicker } from "react-colorful";
+import { HexColorPicker } from 'react-colorful';
 
 const pulse = keyframes`
   from {
@@ -35,36 +35,36 @@ const pulse = keyframes`
 const ColorPickerWrap = ({ children }) => {
   return (<Box
     sx={{
-      ".react-colorful": {
-        width: "8.5rem",
-        height: "3rem",
-        gap: "1rem",
-        margin: "-0.25rem 0 1rem",
-        flexDirection: "row",
+      '.react-colorful': {
+        width: '8.5rem',
+        height: '3rem',
+        gap: '1rem',
+        margin: '-0.25rem 0 1rem',
+        flexDirection: 'row',
 
-        "> *": {
-          borderRadius: "0.5rem",
-          height: "100%",
-          flex: "0 0 4rem",
+        '> *': {
+          borderRadius: '0.5rem',
+          height: '100%',
+          flex: '0 0 4rem',
         }
       },
-      ".react-colorful__saturation": {
+      '.react-colorful__saturation': {
         borderBottom: 0
       },
-      ".react-colorful__interactive:focus .react-colorful__pointer": {
+      '.react-colorful__interactive:focus .react-colorful__pointer': {
         animation: `${pulse} 0.5s infinite alternate ease-in-out`
       }
     }}
   >
     {children}
-  </Box>)
+  </Box>);
 };
 
 const Inputs = ({ children }) => {
   return (<Flex gap="2rem" align="flex-start" justifyContent="center">
     {children}
-  </Flex>)
-}
+  </Flex>);
+};
 
 interface ProfileSettingsDialogProps {
   person: Person;
@@ -89,7 +89,7 @@ export const _ProfileSettingsDialog = ({
     const attempt = e.target.value.trim();
     setEditingUsername(attempt);
     setIsValidUsername(attempt.length > 1);
-  }
+  };
 
   return (
     <Modal
@@ -144,7 +144,7 @@ export const _ProfileSettingsDialog = ({
         </ModalFooter>
       </ModalContent>
     </Modal>
-  )
-}
+  );
+};
 
 export const ProfileSettingsDialog = withErrorBoundary(_ProfileSettingsDialog, { fallback: null });

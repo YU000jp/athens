@@ -22,10 +22,10 @@ const getCaretPositionFromKeyDownEvent = (event) => {
       left: caretLeft + targetLeft,
       top: caretTop + targetTop,
       height: caretHeight + targetTop,
-    }
+    };
     return position;
   }
-}
+};
 
 const scrollToEl = (el) => {
   if (el) {
@@ -35,7 +35,7 @@ const scrollToEl = (el) => {
       inline: 'center',
     });
   }
-}
+};
 
 export const AutocompleteButton = (props: ButtonProps) => {
   const { children, isActive, ...buttonProps } = props;
@@ -65,17 +65,17 @@ export const AutocompleteButton = (props: ButtonProps) => {
       whiteSpace="nowrap"
       fontWeight="normal"
       _first={{
-        borderTopRadius: "inherit",
+        borderTopRadius: 'inherit',
       }}
       _last={{
-        borderBottomRadius: "inherit",
+        borderBottomRadius: 'inherit',
       }}
       {...buttonProps}
     >
       {children}
     </Button>
   );
-}
+};
 
 export const Autocomplete = ({ isOpen, onClose, event, children }) => {
   const menuRef = React.useRef(null);
@@ -84,7 +84,7 @@ export const Autocomplete = ({ isOpen, onClose, event, children }) => {
   useOutsideClick({
     ref: menuRef,
     handler: () => onClose(),
-  })
+  });
 
   React.useEffect(() => {
     const target = event?.target;
@@ -122,7 +122,7 @@ export const Autocomplete = ({ isOpen, onClose, event, children }) => {
           height="1.5em"
           zIndex="100"
           left={menuPosition.left + 'px'}
-          top={menuPosition.top + "px"}
+          top={menuPosition.top + 'px'}
         >
         </Box>
       </PopoverTrigger>
@@ -141,5 +141,5 @@ export const Autocomplete = ({ isOpen, onClose, event, children }) => {
           {children}
         </PopoverContent>
       </Portal>
-    </Popover>)
-}
+    </Popover>);
+};

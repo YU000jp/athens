@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Flex, Heading, VStack, IconButton, Box, Collapse, useDisclosure, forwardRef } from '@chakra-ui/react';
 import { ChevronDownVariableIcon } from '@/Icons/Icons';
 
-const WidgetContext = React.createContext(null)
+const WidgetContext = React.createContext(null);
 
 const useWidget = (props) => {
   const { defaultIsOpen } = props;
@@ -10,8 +10,8 @@ const useWidget = (props) => {
 
   return {
     isOpen, onToggle, onClose
-  }
-}
+  };
+};
 
 export const Widget = forwardRef((props, ref) => {
   const { children, defaultIsOpen, ...rest } = props;
@@ -20,8 +20,8 @@ export const Widget = forwardRef((props, ref) => {
     <VStack align="stretch" spacing={0} {...rest} ref={ref}>
       {children}
     </VStack>
-  </WidgetContext.Provider>)
-})
+  </WidgetContext.Provider>);
+});
 
 export const WidgetTitle = forwardRef(({ children, ...rest }, ref) => {
   return (<Heading
@@ -30,17 +30,17 @@ export const WidgetTitle = forwardRef(({ children, ...rest }, ref) => {
     size="xs"
     flex={1}
     {...rest}
-  >{children}</Heading>)
-})
+  >{children}</Heading>);
+});
 
 export const WidgetHeader = forwardRef(({ children, title, ...rest }, ref) => {
   return (
     <Flex align="center" justify="space-between" gap={1} {...rest} ref={ref}>
-      {typeof title === "string" ? <WidgetTitle>{title}</WidgetTitle> : title}
+      {typeof title === 'string' ? <WidgetTitle>{title}</WidgetTitle> : title}
       {children}
     </Flex>
-  )
-})
+  );
+});
 
 export const WidgetBody = forwardRef(({ children, ...rest }, ref) => {
   const { isOpen } = React.useContext(WidgetContext);
@@ -51,8 +51,8 @@ export const WidgetBody = forwardRef(({ children, ...rest }, ref) => {
         {children}
       </Box>
     </Collapse>
-  )
-})
+  );
+});
 
 export const WidgetToggle = forwardRef((props, ref) => {
   const { onClick, ...rest } = props;
@@ -66,9 +66,9 @@ export const WidgetToggle = forwardRef((props, ref) => {
       colorScheme="subtle"
       size="xs"
       sx={{
-        "svg": {
-          transition: "transform 0.2s",
-          transform: isOpen ? "rotate(0deg)" : "rotate(180deg)",
+        'svg': {
+          transition: 'transform 0.2s',
+          transform: isOpen ? 'rotate(0deg)' : 'rotate(180deg)',
         },
       }}
       icon={<ChevronDownVariableIcon />}
@@ -77,18 +77,18 @@ export const WidgetToggle = forwardRef((props, ref) => {
         if (onClick) {
             onClick();
         } else {
-            alert("Pass onClick to WidgetToggle");
+            alert('Pass onClick to WidgetToggle');
         }
       }}
       {...rest}
     />
-  )
-})
+  );
+});
 
 export const WidgetSection = forwardRef(({ children, ...rest }, ref) => {
   return (
     <Box {...rest} ref={ref}>
       {children}
     </Box>
-  )
+  );
 });

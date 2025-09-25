@@ -10,16 +10,16 @@ interface TaskboxProps extends FlexProps {
   options: string[];
 }
 
-const STATUS_ICON_PROPS: FlexProps & HTMLMotionProps<"div"> = {
+const STATUS_ICON_PROPS: FlexProps & HTMLMotionProps<'div'> = {
   as: motion.div,
   position: 'absolute',
   inset: 0,
   sx: {
     svg: {
-      height: "100%",
-      width: "100%",
+      height: '100%',
+      width: '100%',
     },
-    "path": {
+    'path': {
       strokeWidth: 1.5
     }
   },
@@ -35,52 +35,52 @@ const STATUS_ICON_PROPS: FlexProps & HTMLMotionProps<"div"> = {
     opacity: 0,
     transform: 'translateX(-100%)',
   },
-}
+};
 
 const STATUS = {
-  "To Do": {
+  'To Do': {
     icon: <SquareIcon />,
-    color: "blue.500",
-    text: "To Do",
+    color: 'blue.500',
+    text: 'To Do',
     isDone: false,
   },
-  "Doing": {
+  'Doing': {
     icon: <ArrowRightVariableIcon />,
-    color: "yellow.500",
-    text: "Doing",
+    color: 'yellow.500',
+    text: 'Doing',
     isDone: false,
   },
-  "Blocked": {
+  'Blocked': {
     icon: <PauseVariableIcon />,
-    color: "red.500",
-    text: "Blocked",
+    color: 'red.500',
+    text: 'Blocked',
     isDone: false,
   },
-  "Done": {
+  'Done': {
     icon: <CheckmarkVariableIcon />,
-    color: "green.500",
-    text: "Done",
+    color: 'green.500',
+    text: 'Done',
     isDone: true,
   },
-  "Cancelled": {
+  'Cancelled': {
     icon: <XmarkVariableIcon />,
-    color: "gray.500",
-    text: "Cancelled",
+    color: 'gray.500',
+    text: 'Cancelled',
     isDone: true,
   },
-  "Stalled": {
+  'Stalled': {
     icon: <XmarkVariableIcon />,
-    color: "brown.500",
-    text: "Stalled",
+    color: 'brown.500',
+    text: 'Stalled',
     isDone: false,
   }
-}
+};
 
 export const Taskbox = (props: TaskboxProps) => {
   const { status: initialStatus, options, onChange, ...flexProps } = props;
   const { addToContextMenu, getIsMenuOpen } = React.useContext(ContextMenuContext);
 
-  const [status, setStatus] = React.useState(initialStatus || "To Do");
+  const [status, setStatus] = React.useState(initialStatus || 'To Do');
 
   const isEditable = options?.length > 1;
 
@@ -98,7 +98,7 @@ export const Taskbox = (props: TaskboxProps) => {
           defaultValue={status}
           type="radio"
           onChange={(value) => {
-            onChange(value as string)
+            onChange(value as string);
             setStatus(value as string);
           }}>
           {options.map((option) => {
@@ -108,19 +108,19 @@ export const Taskbox = (props: TaskboxProps) => {
               value={option}
               sx={{
                 "&:hover:not([aria-checked='true'])": {
-                  ".chakra-menu__icon-wrapper": {
+                  '.chakra-menu__icon-wrapper': {
                     opacity: 0.5
                   }
                 }
               }}
             >
               {option}
-            </MenuItemOption>)
+            </MenuItemOption>);
           })}
         </MenuOptionGroup>
       </MenuGroup>
     );
-  }
+  };
 
   return <Flex
     display="inline-flex"
@@ -129,7 +129,7 @@ export const Taskbox = (props: TaskboxProps) => {
     borderRadius="sm"
     alignItems="center"
     height={4}
-    bg={isMenuOpen ? "interaction.surface.hover" : "interaction.surface"}
+    bg={isMenuOpen ? 'interaction.surface.hover' : 'interaction.surface'}
     justifyContent="center"
     onContextMenu={(event) => {
       if (isEditable) {
@@ -153,23 +153,23 @@ export const Taskbox = (props: TaskboxProps) => {
       justifyContent="center"
       position="relative"
       _disabled={{
-        borderWidth: "0",
-        cursor: "default"
+        borderWidth: '0',
+        cursor: 'default'
       }}
       _hover={{}}
       _active={{}}
       {...STATUS[status].isDone ? {
         bg: STATUS[status].color,
-        color: "background.floor",
+        color: 'background.floor',
       } : {
         borderColor: STATUS[status].color,
         color: STATUS[status].color,
         _after: {
           content: "''",
-          position: "absolute",
+          position: 'absolute',
           inset: 0,
           opacity: 0.3,
-          bg: "currentColor"
+          bg: 'currentColor'
         }
       }}
       onClick={() => {
@@ -177,10 +177,10 @@ export const Taskbox = (props: TaskboxProps) => {
           if (isEditable) {
             if (STATUS[status].isDone) {
               setStatus('To Do');
-              onChange('To Do')
+              onChange('To Do');
             } else {
               setStatus('Done');
-              onChange('Done')
+              onChange('Done');
             }
           }
         }
@@ -207,7 +207,7 @@ export const Taskbox = (props: TaskboxProps) => {
               position="relative"
               top="-1px"
               sx={{
-                "path": {
+                'path': {
                   strokeWidth: 1.5
                 }
               }} />
@@ -218,5 +218,5 @@ export const Taskbox = (props: TaskboxProps) => {
         </Portal>
       </Menu>
     )}
-  </Flex >
-}
+  </Flex >;
+};

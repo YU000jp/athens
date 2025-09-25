@@ -1,11 +1,11 @@
-import React from 'react'
+import React from 'react';
 import {
   RangeSlider,
   RangeSliderTrack,
   RangeSliderFilledTrack,
   RangeSliderThumb,
   Tooltip
-} from '@chakra-ui/react'
+} from '@chakra-ui/react';
 
 
 function format (v) {
@@ -14,9 +14,9 @@ function format (v) {
 
 
 export const TimeSlider = (props) => {
-  const {min, max, onChange} = props;
-  const [sliderValue, setSliderValue] = React.useState([min, max])
-  const [showTooltip, setShowTooltip] = React.useState(false)
+  const { min, max, onChange } = props;
+  const [sliderValue, setSliderValue] = React.useState([min, max]);
+  const [showTooltip, setShowTooltip] = React.useState(false);
 
   return (
   <RangeSlider
@@ -49,5 +49,5 @@ export const TimeSlider = (props) => {
       <RangeSliderThumb index={1} />
       </Tooltip>
     </RangeSlider>
-  )
-}
+  );
+};

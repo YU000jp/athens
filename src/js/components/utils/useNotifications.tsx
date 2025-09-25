@@ -1,13 +1,13 @@
-import { ArchiveIcon, ArrowRightIcon, CheckmarkCircleFillIcon } from "@/Icons/Icons";
-import * as React from "react";
-import { groupBy } from "./groupBy";
+import { ArchiveIcon, ArrowRightIcon, CheckmarkCircleFillIcon } from '@/Icons/Icons';
+import * as React from 'react';
+import { groupBy } from './groupBy';
 
 export const useGrouping = (items, defaultGrouping) => {
   const [grouping, setGrouping] = React.useState<string | null>(defaultGrouping);
 
   const sortedItems: any[] = items.sort((a, b) => {
     if (a[grouping] === b[grouping]) return a.id - b.id;
-    return a[grouping] < b[grouping] ? -1 : 1
+    return a[grouping] < b[grouping] ? -1 : 1;
   });
   const groupedItems: any[] = groupBy(sortedItems, grouping);
 
@@ -15,8 +15,8 @@ export const useGrouping = (items, defaultGrouping) => {
     grouping,
     setGrouping,
     groupedItems
-  }
-}
+  };
+};
 
 export const useFilters = (items: any[], defaultFilters, availableFilters) => {
   const [filterIds, setFilterIds] = React.useState<any[]>(defaultFilters);
@@ -32,8 +32,8 @@ export const useFilters = (items: any[], defaultFilters, availableFilters) => {
     setFilterIds,
     filteredItems,
     resetFilters,
-  }
-}
+  };
+};
 
 export const useList = (items: any[]) => {
   const [selectedItemId, setSelectedItemId] = React.useState<string | null>(null);
@@ -51,8 +51,8 @@ export const useList = (items: any[]) => {
     selectedItem,
     selectItem,
     deselectItem,
-  }
-}
+  };
+};
 
 export const useNotifications = (items: any[], setItems, availableFilters: any[], defaultFilters: any[]) => {
 
@@ -84,10 +84,10 @@ export const useNotifications = (items: any[], setItems, availableFilters: any[]
     const editedItems = [...items.slice(0, editedIndex), editedItem, ...items.slice(editedIndex + 1)];
     setItems(editedItems);
   };
-  const markAsRead = (id) => updateItemProperty(id, "isRead", true);
-  const markAsUnread = (id) => updateItemProperty(id, "isRead", false);
-  const markAsArchived = (id) => updateItemProperty(id, "isArchived", true);
-  const markAsUnarchived = (id) => updateItemProperty(id, "isArchived", false);
+  const markAsRead = (id) => updateItemProperty(id, 'isRead', true);
+  const markAsUnread = (id) => updateItemProperty(id, 'isRead', false);
+  const markAsArchived = (id) => updateItemProperty(id, 'isArchived', true);
+  const markAsUnarchived = (id) => updateItemProperty(id, 'isArchived', false);
   const openItem = (id) => {
     const openedItem = items.find(item => item.id === id);
     alert(`Opened ${openedItem.object?.name || openedItem.object?.string}`);
@@ -96,37 +96,37 @@ export const useNotifications = (items: any[], setItems, availableFilters: any[]
     const actions = [];
     if (notification.isRead) {
       actions.push({
-        label: "Mark as unread",
+        label: 'Mark as unread',
         fn: () => markAsUnread(notification.id),
         icon: <CheckmarkCircleFillIcon />
       });
     } else {
       actions.push({
-        label: "Mark as read",
+        label: 'Mark as read',
         fn: () => markAsRead(notification.id),
         icon: <CheckmarkCircleFillIcon />
       });
     }
     if (notification.isArchived) {
       actions.push({
-        label: "Unarchive",
+        label: 'Unarchive',
         fn: () => markAsUnarchived(notification.id),
         icon: <ArchiveIcon />
       });
     } else {
       actions.push({
-        label: "Archive",
+        label: 'Archive',
         fn: () => markAsArchived(notification.id),
         icon: <ArchiveIcon />
       });
     }
     actions.push({
-      label: "Open",
+      label: 'Open',
       fn: () => openItem(notification.id),
       icon: <ArrowRightIcon />
     });
     return actions;
-  }
+  };
 
   return {
     getActionsForNotification,

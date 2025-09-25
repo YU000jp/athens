@@ -37,21 +37,21 @@ export const LocationIndicator = (props: LocationIndicatorProps) => {
           overflow="hidden"
           textAlign="start"
           sx={{
-            "> span": {
-              whiteSpace: "nowrap",
-              overflow: "hidden",
-              textOverflow: "ellipsis",
-              alignItems: "flex-start",
-              justifyContent: "flex-start"
+            '> span': {
+              whiteSpace: 'nowrap',
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+              alignItems: 'flex-start',
+              justifyContent: 'flex-start'
             },
             ...(breadcrumbs && {
-              ".chakra-button__icon": {
-                alignSelf: "flex-end"
+              '.chakra-button__icon': {
+                alignSelf: 'flex-end'
               }
             })
           }}
           {...(breadcrumbs && {
-            height: "auto",
+            height: 'auto',
             py: 1,
             px: 2
           })}
@@ -68,5 +68,5 @@ export const LocationIndicator = (props: LocationIndicatorProps) => {
     ) : (
       <Heading pl={2} whiteSpace="nowrap" noOfLines={0} color="foreground.secondary" size="xs">{currentLocationName}</Heading>
     )}
-  </VStack>
-}
+  </VStack>;
+};

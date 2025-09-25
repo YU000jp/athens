@@ -1,7 +1,7 @@
-import { Box, Flex } from "@chakra-ui/react";
-import { AnimatePresence, motion } from "framer-motion";
-import * as React from "react";
-import { LayoutContext, layoutAnimationTransition } from "./useLayoutState";
+import { Box, Flex } from '@chakra-ui/react';
+import { AnimatePresence, motion } from 'framer-motion';
+import * as React from 'react';
+import { LayoutContext, layoutAnimationTransition } from './useLayoutState';
 import { useInView } from 'react-intersection-observer';
 
 /** Main Content */
@@ -19,12 +19,12 @@ export const MainContent = ({ children, isRightSidebarOpen }) => {
 
   React.useEffect(() => {
     if (inView) {
-      if (isScrolledPastTitle["mainContent"]) {
-        setIsScrolledPastTitle(prev => ({ ...prev, "mainContent": false }));
+      if (isScrolledPastTitle['mainContent']) {
+        setIsScrolledPastTitle(prev => ({ ...prev, 'mainContent': false }));
       }
     } else {
-      if (!isScrolledPastTitle["mainContent"]) {
-        setIsScrolledPastTitle(prev => ({ ...prev, "mainContent": true }));
+      if (!isScrolledPastTitle['mainContent']) {
+        setIsScrolledPastTitle(prev => ({ ...prev, 'mainContent': true }));
       }
     }
   }, [inView, setIsScrolledPastTitle]);
@@ -46,10 +46,10 @@ export const MainContent = ({ children, isRightSidebarOpen }) => {
         display="flex"
         overflowY="auto"
         sx={{
-          "--app-header-height": toolbarHeight,
+          '--app-header-height': toolbarHeight,
         }}
         animate={{
-          paddingRight: isRightSidebarOpen ? unsavedRightSidebarWidth + "vw" : 0,
+          paddingRight: isRightSidebarOpen ? unsavedRightSidebarWidth + 'vw' : 0,
           transition: isResizingLayout ? {
             ...layoutAnimationTransition,
             mass: 0,
