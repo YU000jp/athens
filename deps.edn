@@ -1,15 +1,14 @@
 {:paths ["src/clj" "src/cljs" "src/cljc" "src/js" "src/gen" "test" "resources"]
 
  ;; Repository configuration optimized for restricted environments
- ;; Prioritizes Maven Central and public repositories, removes Clojars dependency
+ ;; Prioritizes Maven Central and public repositories, includes Clojars as fallback
  :mvn/repos
  {"central"   {:url "https://repo1.maven.org/maven2/"}
   "sonatype"  {:url "https://oss.sonatype.org/content/repositories/public/"}
   "maven2"    {:url "https://repo.maven.apache.org/maven2/"}
   "jcenter"   {:url "https://jcenter.bintray.com/"}
-  ;; Clojars commented out for restricted environments
-  ;; Uncomment if access becomes available
-  ;;"clojars"   {:url "https://repo.clojars.org/"}
+  ;; Clojars included as fallback for libraries like tick that are not on Maven Central
+  "clojars"   {:url "https://repo.clojars.org/"}
   }
 
  :deps
@@ -31,21 +30,23 @@
   datascript-transit/datascript-transit #:mvn{:version "0.3.0"}
   
   ;; Alternative to denistakeda/posh - use re-frame directly
-  ;; denistakeda/posh                      #:mvn{:version "0.5.8"}
+  ;; Since posh is required for DataScript integration, we need it from Clojars  
+  denistakeda/posh                      #:mvn{:version "0.5.8"}
   
   ;; HTTP client (available on Maven Central)
   cljs-http/cljs-http                   #:mvn{:version "0.1.46"}
   
   ;; Alternative to metosin/reitit - use built-in routing or simpler alternatives
-  ;; We'll use basic routing or implement custom routing
-  ;; metosin/reitit                        #:mvn{:version "0.5.13"}
-  ;; metosin/komponentit                   #:mvn{:version "0.3.10"}
+  ;; Since reitit is required for routing functionality, we need it from Clojars
+  metosin/reitit                        #:mvn{:version "0.5.13"}
+  metosin/komponentit                   #:mvn{:version "0.3.10"}
   
   ;; Parser (available on Maven Central)
   instaparse/instaparse                 #:mvn{:version "1.4.10"}
   
   ;; Alternative to tick/tick - use cljc.java-time directly
-  ;; tick/tick                             #:mvn{:version "0.5.0-RC5"}
+  ;; Since tick is required for date functionality, we need it from Clojars
+  tick/tick                             #:mvn{:version "0.5.0-RC5"}
   cljc.java-time/cljc.java-time         #:mvn{:version "0.1.9"}
   
   ;; Data manipulation (available on Maven Central)
@@ -102,9 +103,9 @@
   ;; JSON handling for backend
   cheshire/cheshire                     #:mvn{:version "5.10.1"}
   
-  ;; Database migrations (if needed)
-  ragtime/ragtime.jdbc                  #:mvn{:version "0.8.1"}
-  ragtime/ragtime.core                  #:mvn{:version "0.8.1"}
+  ;; Database migrations handled by custom system in athens.common.migrations
+  ;; ragtime/ragtime.jdbc                  #:mvn{:version "0.8.1"}
+  ;; ragtime/ragtime.core                  #:mvn{:version "0.8.1"}
   
   ;; JDBC drivers (if needed)
   org.postgresql/postgresql             #:mvn{:version "42.4.3"}
