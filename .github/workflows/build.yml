@@ -155,7 +155,18 @@ jobs:
        - name: Copy built app to a vercel prod deploy folder
          run: mkdir -p vercel-release/vercel-static/athens && cp -R resources/public/. vercel-release/vercel-static/athens/
 
+       - name: Check Vercel secrets
+         id: check-secrets
+         run: |
+           if [ -z "${{ secrets.VERCEL_TOKEN }}" ] || [ -z "${{ secrets.VERCEL_ORG_ID }}" ] || [ -z "${{ secrets.VERCEL_PROJECT_ID }}" ]; then
+             echo "::notice::Missing Vercel secrets. Skipping Vercel deployment."
+             echo "has_secrets=false" >> $GITHUB_OUTPUT
+           else
+             echo "has_secrets=true" >> $GITHUB_OUTPUT
+           fi
+
        - uses: amondnet/vercel-action@v20
+         if: steps.check-secrets.outputs.has_secrets == 'true'
          with:
            vercel-token: ${{ secrets.VERCEL_TOKEN }}
            vercel-org-id: ${{ secrets.VERCEL_ORG_ID}}
@@ -168,6 +179,17 @@ jobs:
            PRERELEASE: ${{ contains(github.ref, '-alpha.') || contains(github.ref, '-beta.') || contains(github.ref, '-rc.')}}
            PRERELEASE_DOMAIN: beta.athensresearch.org
            RELEASE_DOMAIN: web.athensresearch.org
+
+       - name: Alternative deployment info
+         if: steps.check-secrets.outputs.has_secrets == 'false'
+         run: |
+           echo "::warning::Vercel deployment skipped due to missing secrets."
+           echo "To enable Vercel deployment, add the following secrets to your repository:"
+           echo "- VERCEL_TOKEN: Your Vercel API token"
+           echo "- VERCEL_ORG_ID: Your Vercel organization ID"
+           echo "- VERCEL_PROJECT_ID: Your Vercel project ID"
+           echo ""
+           echo "Built files are available in: ./vercel-release/"
 
 
    release-electron:
