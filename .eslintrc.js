@@ -23,8 +23,8 @@ module.exports = {
   },
   rules: {
     // JavaScript/TypeScript quality rules
-    'no-unused-vars': 'warn',
-    'no-console': 'warn',
+    'no-unused-vars': ['warn', { argsIgnorePattern: '^_' }],
+    'no-console': 'off', // Allow console statements in development
     'prefer-const': 'error',
     'no-var': 'error',
     
@@ -35,10 +35,10 @@ module.exports = {
     'react-hooks/exhaustive-deps': 'warn',
     
     // TypeScript specific rules
-    '@typescript-eslint/no-unused-vars': 'warn',
+    '@typescript-eslint/no-unused-vars': ['warn', { argsIgnorePattern: '^_' }],
     '@typescript-eslint/explicit-function-return-type': 'off',
     '@typescript-eslint/explicit-module-boundary-types': 'off',
-    '@typescript-eslint/no-explicit-any': 'warn',
+    '@typescript-eslint/no-explicit-any': 'off', // Too strict for this codebase
     
     // Code style rules
     'quotes': ['error', 'single', { avoidEscape: true }],

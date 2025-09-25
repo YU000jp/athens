@@ -59,15 +59,7 @@ export const ReferenceBlock = ({ children, actions }) => {
   }
 };
 
-const EmptyReferencesNotice = ({ title }: { title: string }) => {
-  return (<Text
-    background="background.floor"
-    color="foreground.secondary"
-    borderRadius="md"
-    p={4}>
-    No {title.toLowerCase()}
-  </Text>);
-};
+
 
 export const PageReferences = withErrorBoundary(({ children, count, title, defaultIsOpen, onOpen, onClose, extras }: PageReferencesProps) => {
 
