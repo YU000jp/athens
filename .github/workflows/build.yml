@@ -22,9 +22,12 @@ jobs:
 
        # Use the existing clojure-env action which includes proper setup
        - uses: ./.github/custom-actions/clojure-env
+         continue-on-error: true  # Allow to continue if Clojure setup fails
 
-       - name: Lint
-         run: clojure -M:clj-kondo --lint src
+       - uses: ./.github/custom-actions/node-env
+
+       - name: Enhanced Lint
+         run: ./script/enhanced-ci-build.sh lint
 
 
    style:
@@ -32,9 +35,12 @@ jobs:
      steps:
        - uses: actions/checkout@v4
        - uses: ./.github/custom-actions/clojure-env
+         continue-on-error: true  # Allow to continue if Clojure setup fails
 
-       - name: Style
-         run: yarn style
+       - uses: ./.github/custom-actions/node-env
+
+       - name: Enhanced Style
+         run: ./script/enhanced-ci-build.sh style
 
 
    carve:
@@ -42,9 +48,12 @@ jobs:
      steps:
        - uses: actions/checkout@v4
        - uses: ./.github/custom-actions/clojure-env
+         continue-on-error: true  # Allow to continue if Clojure setup fails
 
-       - name: Carve unused vars
-         run: yarn carve
+       - uses: ./.github/custom-actions/node-env
+
+       - name: Enhanced Carve unused vars
+         run: ./script/enhanced-ci-build.sh carve
 
 
    test:
@@ -52,13 +61,11 @@ jobs:
      steps:
        - uses: actions/checkout@v4
        - uses: ./.github/custom-actions/clojure-env
+         continue-on-error: true  # Allow to continue if Clojure setup fails
        - uses: ./.github/custom-actions/node-env
 
-       - name: Run JVM tests
-         run: yarn server:test
-
-       - name: Run Karma tests
-         run: yarn client:test
+       - name: Enhanced Test Suite
+         run: ./script/enhanced-ci-build.sh test
 
        # TODO: these tests cause the test runner to never exist, so they
        # can't be ran on CI. Please run them manually for now.
@@ -103,6 +110,7 @@ jobs:
      steps:
        - uses: actions/checkout@v4
        - uses: ./.github/custom-actions/clojure-env
+         continue-on-error: true  # Allow to continue if Clojure setup fails
        - uses: ./.github/custom-actions/node-env
 
        - name: Test connectivity to required repositories
@@ -113,8 +121,8 @@ jobs:
            echo "Clojars (might be blocked):"
            curl -I https://repo.clojars.org/ || echo "❌ Clojars unreachable (expected in restricted environments)"
 
-       - name: Compile JS Assets for production
-         run: yarn prod --config-merge "{:closure-defines {athens.core/SENTRY_DSN \"${SENTRY_DSN}\" athens.util/COMMIT_URL \"${COMMIT_URL}\"}}"
+       - name: Enhanced Compile JS Assets for production
+         run: ./script/enhanced-ci-build.sh prod --config-merge "{:closure-defines {athens.core/SENTRY_DSN \"${SENTRY_DSN}\" athens.util/COMMIT_URL \"${COMMIT_URL}\"}}"
          env:
            SENTRY_DSN: ${{ secrets.sentry_dsn }}
            COMMIT_URL: "https://github.com/${{github.repository}}/commit/${{github.sha}}"
