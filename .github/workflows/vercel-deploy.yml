@@ -107,7 +107,7 @@ jobs:
         path: vercel-static/
     
     - name: Deploy to Vercel
-      uses: vercel/action@v2
+      uses: amondnet/vercel-action@v25
       with:
         vercel-token: ${{ secrets.VERCEL_TOKEN }}
         vercel-args: '--prod'
@@ -143,7 +143,7 @@ jobs:
         ./vercel-enhanced-build.sh
     
     - name: Deploy fallback to Vercel
-      uses: vercel/action@v2
+      uses: amondnet/vercel-action@v25
       with:
         vercel-token: ${{ secrets.VERCEL_TOKEN }}
         vercel-args: '--prod'
@@ -179,7 +179,7 @@ jobs:
         echo "✅ Static files test passed"
     
     - name: Deploy preview to Vercel
-      uses: vercel/action@v2
+      uses: amondnet/vercel-action@v25
       with:
         vercel-token: ${{ secrets.VERCEL_TOKEN }}
         vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
