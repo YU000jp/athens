@@ -96,7 +96,8 @@
   ring/ring-defaults                    #:mvn{:version "0.3.3"}
   
   ;; Middleware
-  ring-cors/ring-cors                   #:mvn{:version "0.1.13"}
+  ring-cors/ring-cors                   #:mvn{:version "0.1.13"}  
+  ring-basic-authentication/ring-basic-authentication #:mvn{:version "1.2.0"}
   
   ;; JSON handling for backend
   cheshire/cheshire                     #:mvn{:version "5.10.1"}
