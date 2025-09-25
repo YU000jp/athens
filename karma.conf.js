@@ -8,20 +8,23 @@ module.exports = function (config) {
       // Clojars-free date handling solution
       // This configuration works without requiring access to repo.clojars.org
       
-      // 1. Browser-only date handler (no Clojure dependencies)
+      // 1. Load CLDR library first
+      '../node_modules/cldrjs/dist/cldr.js',
+      
+      // 2. Browser-only date handler (no Clojure dependencies)
       '../browser-date-handler.js',
       
-      // 2. Enhanced CLDR initialization with JavaScript fallbacks
+      // 3. Enhanced CLDR initialization with JavaScript fallbacks
       '../cldr-enhanced-init.js',
       
-      // 3. Original CLDR fallbacks for backward compatibility
+      // 4. Original CLDR fallbacks for backward compatibility
       '../cldr-init.js',
       '../cldr-mock.js',
       
-      // 4. Test environment setup (JavaScript-only features)
+      // 5. Test environment setup (JavaScript-only features)
       '../test-env-setup.js',
       
-      // 5. Main test file
+      // 6. Main test file
       'karma-test.js'
     ],
     frameworks: ['cljs-test'],

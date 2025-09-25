@@ -1,4 +1,4 @@
-import { Box, Menu, MenuButton, MenuList, Portal, useOutsideClick } from '@chakra-ui/react';
+import { Box, Menu, MenuButton, MenuList, Portal } from '@chakra-ui/react';
 import * as React from 'react';
 
 export const ContextMenuContext = React.createContext(null);

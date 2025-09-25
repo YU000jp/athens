@@ -128,7 +128,7 @@ export interface WindowButtonsProps {
 }
 
 export const WindowButtons = ({
-  isWinFocused,
+  isWinFocused: _isWinFocused,
   isWinFullscreen,
   isWinMaximized,
   handlePressMinimize,
