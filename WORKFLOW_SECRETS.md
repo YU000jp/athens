@@ -40,11 +40,13 @@ The following secrets are required for automatic Vercel deployment:
 
 ## Graceful Degradation
 
-The workflow has been updated to handle missing Vercel secrets gracefully:
+Both the `build.yml` and `vercel-deploy.yml` workflows have been updated to handle missing Vercel secrets gracefully:
 
 - If Vercel secrets are missing, deployment will be skipped with a warning
 - Build artifacts will still be created and available for manual deployment
 - The workflow will not fail due to missing Vercel credentials
+- Informative messages will guide users on how to configure secrets
+- All jobs will complete successfully even without Vercel secrets
 
 ## Testing Locally
 
@@ -66,15 +68,22 @@ yarn prod
 
 ### Common Issues
 
-1. **"Input required and not supplied: vercel-token"**
-   - Ensure VERCEL_TOKEN secret is set in repository settings
-   - Check that the secret name matches exactly (case-sensitive)
+1. **"Input required and not supplied: vercel-token" (RESOLVED)**
+   - **Fixed in latest workflow**: This error no longer causes workflow failures
+   - The workflow now gracefully skips Vercel deployment when secrets are missing
+   - To enable deployment: Add VERCEL_TOKEN, VERCEL_ORG_ID, and VERCEL_PROJECT_ID secrets
+   - Check that secret names match exactly (case-sensitive)
 
-2. **Server compilation fails**  
+2. **Vercel deployment skipped with warning**
+   - This is normal behavior when Vercel secrets are not configured
+   - Build artifacts are still created for manual deployment  
+   - Add required secrets to enable automatic deployment
+
+3. **Server compilation fails**  
    - Ensure all Clojure dependencies are properly configured
    - Check that network access to Clojars is available in your environment
 
-3. **Build artifacts missing**
+4. **Build artifacts missing**
    - Verify that the build-app job completed successfully
    - Check that all required dependencies are installed
 
