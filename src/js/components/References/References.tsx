@@ -10,7 +10,7 @@ export const PageReference = ({ children }) => {
   );
 };
 
-interface PageReferences {
+interface PageReferencesProps {
   children: React.ReactNode,
   extras: React.ReactNode,
   showIfEmpty: boolean,
@@ -67,7 +67,7 @@ const EmptyReferencesNotice = ({ title }: { title: string }) => {
   </Text>);
 };
 
-export const PageReferences = withErrorBoundary(({ children, count, title, defaultIsOpen, onOpen, onClose, extras }: PageReferences) => {
+export const PageReferences = withErrorBoundary(({ children, count, title, defaultIsOpen, onOpen, onClose, extras }: PageReferencesProps) => {
 
   const { isOpen, onToggle } = useDisclosure({
     defaultIsOpen: defaultIsOpen,

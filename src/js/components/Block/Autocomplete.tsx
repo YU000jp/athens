@@ -17,7 +17,8 @@ const getCaretPositionFromKeyDownEvent = (event) => {
     const target = event.target;
     const selectionStart = target.selectionStart;
     const { left: caretLeft, top: caretTop, height: caretHeight } = getCaretCoordinates(event.target, selectionStart);
-    const { x: targetLeft, y: targetTop } = event?.target.getBoundingClientRect();
+    const targetRect = target.getBoundingClientRect();
+    const { x: targetLeft, y: targetTop } = targetRect;
     const position = {
       left: caretLeft + targetLeft,
       top: caretTop + targetTop,
