@@ -1,0 +1,8 @@
+{;; Disable problematic namespace formatting to avoid ExceptionInfo errors
+ :rules
+ {:namespaces {:enabled? false}
+  :vars {:enabled? true}
+  :functions {:enabled? true}
+  :indentation {:enabled? true}
+  :whitespace {:enabled? true}
+  :blank-lines {:enabled? true}}}

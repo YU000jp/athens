@@ -4,7 +4,7 @@
   (:require
     [clojure.string :as string]))
 
-;; Helper function for zero-padding numbers
+;; Helper function for zero-padding numbers (used in custom-format-date)
 (defn- zero-pad 
   "Pad number with leading zeros to specified width"
   [n width]
