@@ -1,51 +1,305 @@
 <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset='utf-8'>
-    <meta name="viewport" content="width=device-width,initial-scale=1">
-      <link rel="shortcut icon" type="image/svg+xml" href="favicon.svg" />
-      <link rel="shortcut icon" type="image/png" href="favicon.png" />
-      <link href="./css/katex.min.css" rel="stylesheet" />
-      <noscript>
-        JavaScript must be enabled in your browser
-      </noscript>
-      <script>
-        !function(t,e){var o,n,p,r;e.__SV||(window.posthog=e,e._i=[],e.init=function(i,s,a){function g(t,e){var o=e.split(".");2==o.length&&(t=t[o[0]],e=o[1]),t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}(p=t.createElement("script")).type="text/javascript",p.async=!0,p.src=s.api_host+"/static/array.js",(r=t.getElementsByTagName("script")[0]).parentNode.insertBefore(p,r);var u=e;for(void 0!==a?u=e[a]=[]:a="posthog",u.people=u.people||[],u.toString=function(t){var e="posthog";return"posthog"!==a&&(e+="."+a),t||(e+=" (stub)"),e},u.people.toString=function(){return u.toString(1)+".people (stub)"},o="capture identify alias people.set people.set_once set_config register register_once unregister opt_out_capturing has_opted_out_capturing opt_in_capturing reset isFeatureEnabled onFeatureFlags".split(" "),n=0;n<o.length;n++)g(u,o[n]);e._i.push([i,s,a])},e.__SV=1)}(document,window.posthog||[]);
-        posthog.init('qouvHPR2-blOal8-l6CSmFybj8VWojBlv472Ac-ovAI',
-                     {api_host:'https://app.posthog.com',
-                      persistence:'localStorage',
-                      autocapture:false,
-                      property_blacklist:['$ip', /* it's not getting filtered out */
-                                          '$current_url',
-                                          '$pathname']})
-      </script>
-  </head>
-  <body>
-    <div id="app">
-    </div>
-    <script>
-      var userAgent = navigator.userAgent.toLowerCase();
-      function isElectron() {
-        return userAgent.indexOf("electron/") > -1
-      }
-      function show10x() {
-        localStorage.setItem("day8.re-frame-10x.show-panel","\"true\"")
-        localStorage.setItem("day8.re-frame-10x.using-trace?","\"true\"")
-      }
-    </script>
-    <script>
-      var electron = isElectron()
-      var src = ""
-      if (electron) {
-         src = "js/compiled/renderer.js"
-         show10x() // 10x exists on DOM by default, but athens.style hides via CSS
-      } else {
-         src = "js/compiled/app.js"
-      }
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Athens Research - Vercel デプロイメント</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: system-ui, -apple-system, 'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #f8f9fa;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        .header {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+        .logo {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+        }
+        .status-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+        .status-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .status-success {
+            border-left: 4px solid #28a745;
+        }
+        .status-warning {
+            border-left: 4px solid #ffc107;
+        }
+        .status-error {
+            border-left: 4px solid #dc3545;
+        }
+        .nav-section {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            margin: 2rem 0;
+        }
+        .nav-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        .nav-link {
+            display: flex;
+            align-items: center;
+            padding: 1rem;
+            background: #007bff;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            transition: background-color 0.2s;
+        }
+        .nav-link:hover {
+            background: #0056b3;
+        }
+        .nav-link .icon {
+            font-size: 1.5rem;
+            margin-right: 0.5rem;
+        }
+        .technical-details {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            margin: 2rem 0;
+        }
+        .code-block {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 4px;
+            padding: 1rem;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            overflow-x: auto;
+        }
+        .component-demo {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            margin: 2rem 0;
+        }
+        .demo-block {
+            border: 2px dashed #007bff;
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+            background: #f8f9ff;
+        }
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+            .nav-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">🏛️</div>
+            <h1>Athens Research</h1>
+            <p><strong>オープンソース知識グラフアプリケーション</strong></p>
+            <p>Vercel デプロイメント - 制限環境対応版</p>
+        </div>
 
-      var script = document.createElement("script");
-      script.setAttribute("src", src);
-      document.getElementsByTagName("head")[0].appendChild(script);
+        <div class="status-grid">
+            <div class="status-card status-success">
+                <h3>✅ 正常動作</h3>
+                <ul>
+                    <li>JavaScript/TypeScript コンポーネント</li>
+                    <li>React コンポーネントライブラリ</li>
+                    <li>Babel トランスパイル</li>
+                    <li>静的アセット配信</li>
+                </ul>
+            </div>
+            
+            <div class="status-card status-error">
+                <h3>❌ 利用不可</h3>
+                <ul>
+                    <li>ClojureScript コンパイル (Clojars必須)</li>
+                    <li>フル Athens アプリケーション</li>
+                    <li>repo.clojars.org アクセス</li>
+                    <li>動的ナレッジグラフ機能</li>
+                </ul>
+            </div>
+            
+            <div class="status-card status-warning">
+                <h3>⚠️ 部分対応</h3>
+                <ul>
+                    <li>静的コンテンツ配信</li>
+                    <li>ドキュメント表示</li>
+                    <li>コンポーネントプレビュー</li>
+                    <li>開発情報ページ</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="nav-section">
+            <h2>🚀 利用可能な機能</h2>
+            <div class="nav-grid">
+                <a href="#components" class="nav-link">
+                    <span class="icon">📦</span>
+                    <div>
+                        <strong>コンポーネント</strong><br>
+                        <small>ビルド済みReactコンポーネント</small>
+                    </div>
+                </a>
+                <a href="/clerk/" class="nav-link">
+                    <span class="icon">📚</span>
+                    <div>
+                        <strong>Clerk Notebooks</strong><br>
+                        <small>開発ドキュメント</small>
+                    </div>
+                </a>
+                <a href="https://github.com/YU000jp/athens" class="nav-link" target="_blank">
+                    <span class="icon">📋</span>
+                    <div>
+                        <strong>GitHub リポジトリ</strong><br>
+                        <small>ソースコードと詳細</small>
+                    </div>
+                </a>
+                <a href="#technical" class="nav-link">
+                    <span class="icon">🔧</span>
+                    <div>
+                        <strong>技術詳細</strong><br>
+                        <small>ビルドとトラブルシューティング</small>
+                    </div>
+                </a>
+            </div>
+        </div>
+
+        <div class="component-demo" id="components">
+            <h2>📦 ビルド済みコンポーネント</h2>
+            <p>以下のReact/TypeScriptコンポーネントが正常にビルドされ、利用可能です:</p>
+            
+            <div class="demo-block">
+                <h4>🧩 Icons コンポーネント</h4>
+                <p>SVGアイコンコンポーネント群 - Athens UIで使用される各種アイコン</p>
+            </div>
+            
+            <div class="demo-block">
+                <h4>📝 Block コンポーネント</h4>
+                <p>ブロックエディター関連コンポーネント - Athens のコア編集機能</p>
+            </div>
+            
+            <div class="demo-block">
+                <h4>🎨 UI コンポーネント</h4>
+                <p>ユーザーインターフェースコンポーネント - ボタン、メニューなど</p>
+            </div>
+            
+            <p><strong>注意:</strong> これらのコンポーネントは静的にビルドされており、完全なClojureScriptアプリケーションなしでは動的機能は制限されています。</p>
+        </div>
+
+        <div class="technical-details" id="technical">
+            <h2>🔧 技術詳細とトラブルシューティング</h2>
+            
+            <h3>📊 ビルド環境分析</h3>
+            <div class="code-block">
+Environment Capabilities:
+• Node.js: ✅ Available (v20+)
+• Yarn: ✅ Available 
+• Babel: ✅ Functioning
+• Java: ❓ May be available but limited
+• Clojure CLI: ❌ Installation blocked
+• Maven Central: ❓ Limited access
+• Clojars: ❌ Access restricted
+            </div>
+            
+            <h3>🎯 完全なAthensを実行するための解決策</h3>
+            
+            <h4>1. ローカル開発環境 (推奨)</h4>
+            <div class="code-block">
+# 完全な開発環境セットアップ
+git clone https://github.com/YU000jp/athens.git
+cd athens
+yarn install
+clojure -P  # 依存関係ダウンロード
+yarn dev    # 開発サーバー起動
+            </div>
+            
+            <h4>2. GitHub Actions による事前ビルド</h4>
+            <div class="code-block">
+# .github/workflows/build.yml で以下を設定:
+# 1. Clojure環境でフルビルド実行
+# 2. 静的アセット生成
+# 3. Vercelへの事前ビルド済みファイルデプロイ
+            </div>
+            
+            <h4>3. Docker コンテナ利用</h4>
+            <div class="code-block">
+# 完全なClojure環境を含むDocker環境
+docker-compose up athens-dev
+# または
+docker run -p 3000:3000 athens-clojure-env
+            </div>
+            
+            <h3>🌐 Vercel制限事項の詳細</h3>
+            <ul>
+                <li><strong>ネットワーク制限:</strong> 一部外部リポジトリ（Clojars）へのアクセスがブロック</li>
+                <li><strong>ビルド時間制限:</strong> Clojureコンパイルには時間がかかる場合がある</li>
+                <li><strong>メモリ制限:</strong> 大規模なClojureScriptコンパイルには十分なメモリが必要</li>
+                <li><strong>カスタムバイナリ:</strong> Clojure CLIの動的インストールが制限される場合がある</li>
+            </ul>
+            
+            <h3>📚 詳細ドキュメント</h3>
+            <p>詳細な解決方法は以下を参照してください:</p>
+            <ul>
+                <li><a href="https://github.com/YU000jp/athens/blob/main/README.md">README.md - セットアップガイド</a></li>
+                <li><a href="https://github.com/YU000jp/athens/blob/main/CLOJARS_ALTERNATIVES.md">CLOJARS_ALTERNATIVES.md - ネットワーク制限対応</a></li>
+                <li><a href="https://github.com/YU000jp/athens/blob/main/BUILD_TROUBLESHOOTING.md">BUILD_TROUBLESHOOTING.md - ビルド問題解決</a></li>
+                <li><a href="https://github.com/YU000jp/athens/blob/main/VERCEL_SETUP.md">VERCEL_SETUP.md - Vercel固有の設定</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        // Simple JavaScript for enhanced interactivity
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add smooth scrolling for anchor links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }
+                });
+            });
+            
+            // Display build timestamp
+            const buildTime = new Date().toLocaleString('ja-JP');
+            document.title += ` - ビルド: ${buildTime}`;
+        });
     </script>
-  </body>
+</body>
 </html>
