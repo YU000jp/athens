@@ -407,7 +407,8 @@ function build_with_limited_deps() {
     # Try to use Clojars-free configuration if available
     if [ -f "deps-no-clojars.edn" ]; then
         echo "📁 Using Clojars-free dependency configuration..."
-        cp deps-no-clojars.edn deps.edn.backup
+        cp deps.edn deps.edn.backup
+        cp deps-no-clojars.edn deps.edn
         
         # Try basic Clojure operations with timeout
         if timeout 300s clojure -P 2>/dev/null; then
