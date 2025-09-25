@@ -45,7 +45,7 @@ echo "✅ Clojure dependencies fetched"
 echo
 
 echo "🏗️  Testing Shadow-CLJS compilation..."
-npx shadow-cljs compile app --verbose
+clojure -M:shadow-cljs compile app --verbose
 echo "✅ Shadow-CLJS compilation successful"
 echo
 
