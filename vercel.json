@@ -13,11 +13,6 @@
   "installCommand": "yarn vercel:install:enhanced",
   "framework": null,
   "public": false,
-  "functions": {
-    "pages/api/**/*.js": {
-      "runtime": "nodejs18.x"
-    }
-  },
   "rewrites": [
     {
       "source": "/athens/(.*)",

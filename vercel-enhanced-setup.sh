@@ -149,8 +149,9 @@ EOF
             echo "🎯 Using original deps.edn (full network access)"
             ;;
         "partial"|"restricted")
-            echo "🎯 Using Clojars-free deps.edn (limited network access)"
-            cp deps-no-clojars.edn deps.edn
+            echo "🎯 Skipping dependency switching - ClojureScript requires Clojars"
+            echo "ℹ️  Will use static-only build mode"
+            # Don't modify deps.edn since ClojureScript won't be compiled anyway
             ;;
     esac
 }

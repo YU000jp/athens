@@ -102,9 +102,9 @@
   ;; JSON handling for backend
   cheshire/cheshire                     #:mvn{:version "5.10.1"}
   
-  ;; Database migrations (if needed)
-  ragtime/ragtime.jdbc                  #:mvn{:version "0.8.1"}
-  ragtime/ragtime.core                  #:mvn{:version "0.8.1"}
+  ;; Database migrations handled by custom system in athens.common.migrations
+  ;; ragtime/ragtime.jdbc                  #:mvn{:version "0.8.1"}
+  ;; ragtime/ragtime.core                  #:mvn{:version "0.8.1"}
   
   ;; JDBC drivers (if needed)
   org.postgresql/postgresql             #:mvn{:version "42.4.3"}

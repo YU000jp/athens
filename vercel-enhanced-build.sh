@@ -30,10 +30,12 @@ function detect_build_capabilities() {
             echo "✅ Clojars accessible"
             external_deps=true
         else
-            echo "❌ Clojars blocked"
+            echo "❌ Clojars blocked - ClojureScript compilation not possible"
+            clojure_available=false  # Force disable Clojure when Clojars is blocked
         fi
     else
         echo "❌ Network connectivity limited"
+        clojure_available=false
     fi
     
     # Export capabilities as environment variables
@@ -238,10 +240,10 @@ function create_static_build() {
             <div class="status-card status-error">
                 <h3>❌ 利用不可</h3>
                 <ul>
-                    <li>ClojureScript コンパイル</li>
-                    <li>Clojure 依存関係解決</li>
+                    <li>ClojureScript コンパイル (Clojars必須)</li>
+                    <li>フル Athens アプリケーション</li>
                     <li>repo.clojars.org アクセス</li>
-                    <li>動的アプリケーション機能</li>
+                    <li>動的ナレッジグラフ機能</li>
                 </ul>
             </div>
             
@@ -407,7 +409,8 @@ function build_with_limited_deps() {
     # Try to use Clojars-free configuration if available
     if [ -f "deps-no-clojars.edn" ]; then
         echo "📁 Using Clojars-free dependency configuration..."
-        cp deps-no-clojars.edn deps.edn.backup
+        cp deps.edn deps.edn.backup
+        cp deps-no-clojars.edn deps.edn
         
         # Try basic Clojure operations with timeout
         if timeout 300s clojure -P 2>/dev/null; then
@@ -455,19 +458,13 @@ function main_build_process() {
             echo "✅ Full Athens build completed successfully!"
             return 0
         else
-            echo "⚠️ Full build failed, trying partial build..."
+            echo "⚠️ Full build failed, falling back to static..."
         fi
     fi
     
-    if [ "$ATHENS_CLOJURE_AVAILABLE" = "true" ] && [ "$ATHENS_NETWORK_ACCESS" = "true" ]; then
-        echo "🔄 Partial build mode: Clojure available, limited dependencies"
-        if build_with_limited_deps; then
-            echo "✅ Partial build completed successfully!"
-            return 0
-        else
-            echo "⚠️ Partial build failed, falling back to static..."
-        fi
-    fi
+    # Skip partial builds - they don't work without Clojars
+    # Most ClojureScript dependencies are only available on Clojars
+    echo "ℹ️  ClojureScript ecosystem requires Clojars access - skipping Clojure builds"
     
     # Final fallback: static-only build
     echo "🎯 Static build mode: Creating comprehensive static version"
