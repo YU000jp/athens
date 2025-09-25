@@ -2,10 +2,17 @@
   "Enhanced date handling with multiple fallback strategies
    This provides alternatives to js-joda/tick for more reliable date operations"
   (:require
-    [clojure.string :as string]
-    #?(:cljs [cljs.reader :as reader])
-    #?(:cljs [goog.i18n.DateTimeFormat :as goog-dtf])
-    #?(:cljs [goog.date :as goog-date])))
+    [clojure.string :as string]))
+
+;; Helper function for zero-padding numbers
+(defn- zero-pad 
+  "Pad number with leading zeros to specified width"
+  [n width]
+  #?(:clj  (format (str "%0" width "d") n)
+     :cljs (let [s (str n)]
+             (if (>= (count s) width)
+               s
+               (str (apply str (repeat (- width (count s)) "0")) s)))))
 
 ;; Enhanced date formatters with fallback strategies
 (def enhanced-formatters
@@ -55,12 +62,12 @@
            display-hour (if (= 0 (mod hours 12)) 12 (mod hours 12))]
        (case format-type
          :title-date (str (nth months month) " " day ", " year)
-         :us-date (str (string/join "-" [(format "%02d" (inc month))
-                                        (format "%02d" day) 
+         :us-date (str (string/join "-" [(zero-pad (inc month) 2)
+                                        (zero-pad day 2) 
                                         year]))
          :display (str (nth months month) " " day ", " year " "
-                      display-hour ":" (format "%02d" minutes) am-pm)
-         :iso (str year "-" (format "%02d" (inc month)) "-" (format "%02d" day))
+                      display-hour ":" (zero-pad minutes 2) am-pm)
+         :iso (str year "-" (zero-pad (inc month) 2) "-" (zero-pad day 2))
          :compact (str (subs (nth months month) 0 3) " " day ", " (subs (str year) 2))
          (.toString date-obj)))))
 
