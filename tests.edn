@@ -1,0 +1,10 @@
+#kaocha/v1
+{:tests [{:id :unit
+          :test-paths ["test"]
+          :source-paths ["src/clj" "src/cljc"]
+          :ns-patterns [".*-test$"]
+          ;; Exclude fluree tests by default (too heavy for CI)
+          :skip-meta [:fluree]}]
+ 
+ :profiles {:ci {:reporter [kaocha.report/documentation]
+                 :plugins [:kaocha.plugin/profiling]}}}
